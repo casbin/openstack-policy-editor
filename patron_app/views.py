@@ -35,8 +35,9 @@ def metadata(request, param1):
     print "file_object = " + str(file_object)
 
     try:
-        metadata_text = file_object.read()
+        response_data = json.load(file_object)
+        # metadata_text = file_object.read()
     finally:
         file_object.close()
 
-    return HttpResponse(metadata_text, content_type="application/json")
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
