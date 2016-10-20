@@ -16,6 +16,9 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from patron_app.views import users
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^users/$', users),
 ]
