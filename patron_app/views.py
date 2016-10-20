@@ -6,7 +6,7 @@ from django.http import HttpResponse
 import json
 import os
 
-patron_dir = "J:/etc/patron"
+patron_dir = "C:/etc/patron"
 
 
 def users(request):
