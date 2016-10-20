@@ -8,6 +8,7 @@ import os
 
 patron_dir = "J:/etc/patron"
 
+
 def users(request):
     if request.method != "GET":
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
@@ -26,13 +27,34 @@ def users(request):
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+
 def metadata(request, param1):
     if not os.path.exists(patron_dir + "/custom_policy/" + param1):
         return HttpResponse("The user doesn't exist, user = " + param1, content_type="text/html")
-
     print "open path = " + patron_dir + "/custom_policy/" + param1 + "/metadata.json"
+
     file_object = open(patron_dir + "/custom_policy/" + param1 + "/metadata.json", 'r')
-    print "file_object = " + str(file_object)
+
+    try:
+        response_data = json.load(file_object)
+        # metadata_text = file_object.read()
+    finally:
+        file_object.close()
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+def policy(request, param1, param2):
+    if not os.path.exists(patron_dir + "/custom_policy/" + param1):
+        return HttpResponse("The user doesn't exist, user = " + param1, content_type="text/html")
+
+    if not os.path.exists(patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"):
+        return HttpResponse("The policy doesn't exist, user = " + param1 + ", policy = " + param2,
+                            content_type="text/html")
+
+    print "open path = " + patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"
+
+    file_object = open(patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json", 'r')
 
     try:
         response_data = json.load(file_object)

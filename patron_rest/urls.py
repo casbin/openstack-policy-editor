@@ -18,9 +18,11 @@ from django.contrib import admin
 
 from patron_app.views import users
 from patron_app.views import metadata
+from patron_app.views import policy
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^users/$', users),
-    url(r'^users/(.+)/$', metadata),
+    url(r'^users/(\w+)/$', metadata),
+    url(r'^users/(\w+)/(.+)/$', policy),
 ]
