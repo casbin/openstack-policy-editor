@@ -1,0 +1,50 @@
+#center{
+    margin: auto;
+    position: absolute;
+    height: 30%;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+.marginLeft{
+    margin-left: 50px;
+}
+.marginLeftSmall{
+    margin-left: 25px;
+}
+.form-control{
+    width:170px;
+    display: inline;
+}
+/* 限制滚动条区域 */
+.custom-menu-scroll{
+    overflow-y:auto;
+    width:auto;
+    height:200px;
+}
+.custom-list-scroll{
+    overflow: auto;
+    width:auto;
+    height:200px;
+}
+.pointer-as-hand{
+    cursor:pointer;
+}
+.delete-btn{
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    float: right;
+}
+.small-text{
+    font-size: medium;
+}
+.input-width{
+    width: 20%;
+}
+
+.key-color{
+    color:purple;
+}
+
+.value-color{
+    color:darkgreen;
+}

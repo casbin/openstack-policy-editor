@@ -1,0 +1,37 @@
+{
+	"current-policy": "and-policy",
+	"and-policy": {
+		"name": "and-policy",
+		"type": "op-and",
+		"built-in": "true",
+		"version": "v1.0",
+		"content": "default-policy, or-policy",
+		"default-policy": {
+			"name": "default-policy",
+			"type": "default",
+			"built-in": "true",
+			"version": "v1.0",
+			"content": "policy.json"
+		},
+		"or-policy": {
+			"name": "or-policy",
+			"type": "op-or",
+			"built-in": "true",
+			"version": "v1.0",
+			"content": "enable-policy, custom-policy",
+			"enable-policy": {
+				"name": "enable-policy",
+				"type": "default",
+				"built-in": "true",
+				"version": "v1.0",
+				"content": "enable.json"
+			},
+			"custom-policy": {
+				"name": "custom-policy",
+				"type": "default",
+				"version": "v1.0",
+				"content": "custom-policy.json"
+			}
+		}
+	}
+}
