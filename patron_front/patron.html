@@ -23,7 +23,6 @@
          2.Value的话，前三个固定，第四部分需要从policy.json中除去带冒号的，剩下的key显示出来，内容显示在鼠标指上去的提示中。
          */
         //TODO 比如default，true or project***，context_is_admin，cells_scheduler_filter
-        //TODO 自定义规则名字禁止有冒号吧
         // .load()方法，已经废弃，现在用来执行ajax操作。只有.on()和.onload
         //$(document).ready()——网页中所有 DOM 结构绘制完毕后就执行，可能 DOM 元素关联的内容并没有加载完
 
@@ -144,6 +143,12 @@
         <div class="col-lg-10 col-lg-offset-1">
             <ul class="list-group custom-list-scroll" id="rule-list-group">
             </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2 col-lg-offset-5">
+            <button type="button" class="btn btn-success marginLeftSmall" onclick="merge_rule_and_policy()">保存此文件</button>
         </div>
     </div>
 </div>

@@ -1,6 +1,6 @@
 function afterFirstSelectorChanged(key) {
     $("#action_menu").empty();
-    //为啥用 policy_array.key不行：需要硬编码 
+    //为啥用 policy_array.key不行：需要硬编码
     var first_array = policy_array[key];
     for(var options in first_array){
         $("#action_menu").append('<li><input type="radio" id="'+first_array[options]+'"name="action_menu"><label for="'+first_array[options]+'">'+first_array[options]+'</label></li>');   //为Select追加一个Option(下拉项)
@@ -51,6 +51,10 @@ function save_this_rule() {
         alert("请输入规则名");
         return;
     }
+    if(name.indexOf(":")) {
+        alert("规则名中禁止出现冒号");
+        return;
+    }
     custom_rule.append
     custom_rule[name] = value;//添加属性
     show_sub_rule_menu();//刷新rule子菜单
@@ -94,5 +98,6 @@ function afterDeleteRuleListItem(key) {
 }
 
 function merge_rule_and_policy(){
-
+    var result = $.extend({}, current_json,custom_rule);//合并两个js对象
+    return result;
 }

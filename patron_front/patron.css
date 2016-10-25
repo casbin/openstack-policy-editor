@@ -37,6 +37,7 @@
 .small-text{
     font-size: medium;
 }
+
 .input-width{
     width: 20%;
 }
@@ -47,4 +48,12 @@
 
 .value-color{
     color:darkgreen;
+}
+
+/*当鼠标指上去的时候变灰*/
+li.list-group-item:hover,
+li.list-group-item:focus {
+    color: #555;
+    text-decoration: none;
+    background-color: #f5f5f5;
 }

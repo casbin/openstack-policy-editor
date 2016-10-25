@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="zTreeStyle/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="ztree_js/jquery.ztree.all.min.js"></script>
+    <script>
+        var treedata;
+        var metadata = $.getJSON("json/metadata.json", function (data) {
+            treedata = data;
+            delete treedata["current-policy"];
+
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>
