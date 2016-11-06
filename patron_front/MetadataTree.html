@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3.策略树编辑器</title>
+    <link rel="stylesheet" href="zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="MetadataTree.css" type="text/css">
+    <script type="text/javascript" src="lib/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="MetadataTree.js"></script>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="lib/bootstrap.min.js"></script>
+    <script type="text/javascript" src="ztree_js/jquery.ztree.all.min.js"></script>
+    <script>
+        var user_id = "85c8848b1dd64c7ebb2c5baeb12e25c3";
+        //TODO 最好不要有重名的json
+        var treedata;
+        var zTreeObj;
+        var setting = {
+            view: {
+                addHoverDom: addHoverDom,
+                removeHoverDom: removeHoverDom,
+                selectedMulti: false
+            },
+            edit: {
+                enable: true,
+                editNameSelectAll: true,
+                showRenameBtn: showRenameBtn
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                beforeRemove: beforeRemove,
+                onRemove: onRemove,
+                beforeCollapse: beforeCollapse,
+                onDblClick: myOnDblClick
+            }
+        };
+
+        var realRootNode = new Object();
+        $(document).ready(function () {
+            user_id = GetQueryString("user_id");//从url中获取user_id，再拿去get
+            //TODO
+            $.getJSON("json/metadata.json", function (data) {
+                treedata = data;
+                rootNodeName = treedata["current-policy"];//拿到根节点名字
+                realRootNode = treedata[rootNodeName];
+                delete treedata["current-policy"];//多余的属性，最后再加即可
+                originTree2FormatTree(realRootNode);//转成规范的格式（假设只有一个策略(不含and-or)，则不需要容器来包裹，因此传treeNode[name]而不是treeNode）
+
+                zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, realRootNode);//显示树
+                //$("#selectAll").bind("click", selectAll);
+                zTreeObj.expandAll(true);//默认全部展开
+                showJSON("ready");
+            });
+        });
+
+        function beforeCollapse(treeId, treeNode) {
+            return false;
+        }
+
+        //如果删除后没有子节点，就把子节点的content给父节点，父节点type变为default
+        //如果删除后还有子节点，就把父节点的content去掉本节点的名字
+        function onRemove(e, treeId, treeNode) {
+            var parentNode = treeNode.getParentNode();
+            if (parentNode.children.length == 0) {
+                parentNode.type = "default";
+                parentNode.content = treeNode.content;
+            } else if (parentNode.children.length >= 1) {
+                parentNode.content = deleteItemFromContent(parentNode.content, treeNode.name);//删除对应的name和逗号
+            }
+        }
+
+        function showRenameBtn(treeId, treeNode) {
+            return false;
+        }
+
+        //在修改的时候修改父节点的content,也要在添加的时候修改父节点的content。
+        //使用zTree规定的方法来修改节点信息
+        function updateNode(treeId) {
+            treeNode = zTreeObj.getNodeByTId(treeId);//通过id获取到节点
+            if ($("#modeleditor_name").val() == "") {
+                alert("名字不能为空！");
+            } else if ($("#modeleditor_content").val() == "") {
+                alert("content不能为空！");
+            } else if ($("#modeleditor_type").val() == "default" && $("#modeleditor_content").val().indexOf(",") > -1) {//如果含逗号而且是default
+                alert("单文件名中不能含有逗号！");//不可以重名，因为每个的name都是父对象的属性名，重名会相互覆盖的
+            } else if ($("#modeleditor_type").val() == "default" && (
+                    $("#modeleditor_content").val().indexOf("&") > -1 ||
+                    $("#modeleditor_content").val().indexOf("=") > -1 ||
+                    $("#modeleditor_content").val().indexOf("+") > -1 ||
+                    $("#modeleditor_content").val().indexOf("%") > -1 ||
+                    $("#modeleditor_content").val().indexOf("#") > -1 ||
+                    trimStr($("#modeleditor_content").val()).indexOf(" ") > -1))//这里先去除首位空格再说
+            {
+                alert("文件名中不能含有“& = + % # 空格”等符号！");
+            } else if ($("#modeleditor_type").val() == "default" && trimStr($("#modeleditor_content").val()).toLowerCase().endWith(".json") == false) {//同时考虑了大小写
+                alert('文件名需以 “.json” 结束！');
+            } else if (findIfExistDuplicatePolicyName($("#modeleditor_name").val())) {
+                alert('文件名已存在！请重新输入');
+            } else {
+                tempName = treeNode.name;
+                treeNode.name = trimStr($("#modeleditor_name").val());
+                if (treeNode.getParentNode() != null) {//如果不是根节点
+                    treeNode.getParentNode().content = treeNode.getParentNode().content.replace(tempName, treeNode.name);//更新父节点的content中的name
+                }
+                treeNode.type = trimStr($("#modeleditor_type").val());
+                treeNode["built-in"] = trimStr($("#modeleditor_builtin").val());
+                treeNode.version = trimStr($("#modeleditor_version").val());
+                treeNode.content = trimStr($("#modeleditor_content").val());
+                zTreeObj.updateNode(treeNode);
+                alert("修改成功！");
+                $('#myModal').modal("hide");//关闭模态框
+            }
+        }
+
+        function myOnDblClick(event, treeId, treeNode) {
+            $("#modeleditor_name").val(treeNode.name);
+            $("#modeleditor_type").empty();
+            //根据op-or 和 op-and来决定选择框的选项，以及是否可编辑
+            if (treeNode.type == "op-and" || treeNode.type == "op-or") {
+                $("#modeleditor_type").append("<option value='op-and'>op-and</option>");
+                $("#modeleditor_type").append("<option value='op-or'>op-or</option>");
+                $("#modeleditor_type").removeAttr("disabled");
+            } else {
+                $("#modeleditor_type").append("<option value='default'>default</option>");
+                $("#modeleditor_type").attr("disabled", "disabled");
+            }
+            $("#modeleditor_type").val(treeNode.type);
+
+            //如果没有build-in，就默认设置为false
+            if (!treeNode.hasOwnProperty("built-in")) {
+                $("#modeleditor_builtin").val("false");
+            } else {
+                $("#modeleditor_builtin").val(treeNode["built-in"]);
+            }
+
+            $("#modeleditor_version").val(treeNode.version);
+            $("#modeleditor_content").val(treeNode.content);
+
+            //如果是多个选项就禁止编辑content防止出错
+            if (treeNode.type == "op-and" || treeNode.type == "op-or") {
+                $("#modeleditor_content").attr("disabled", "disabled").attr("title", "非叶节点不可编辑content");
+            } else {
+                $("#modeleditor_content").removeAttr("disabled");
+            }
+
+            //隐藏/显示 编辑按钮
+            if (treeNode.type == "op-and" || treeNode.type == "op-or") {
+                $("#goto_policy_editor_btn").hide();
+            } else {
+                $("#goto_policy_editor_btn").show();
+            }
+
+            //设置按钮的回调
+            $("#modeleditor_save").attr('onclick', 'updateNode("' + treeNode.tId + '")');
+
+            $('#myModal').modal();//最后打开模态对话框
+        }
+
+        //显示加号、编辑图标以及事件
+        var newCount = 1;
+        function addHoverDom(treeId, treeNode) {
+            var sObj = $("#" + treeNode.tId + "_span");
+            if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+            var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+                    + "' title='add node' onfocus='this.blur();'></span>";
+            sObj.after(addStr);
+            var btn = $("#addBtn_" + treeNode.tId);
+            //点击事件
+            if (btn) btn.bind("click", function () {
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                randomNumber = Math.floor(Math.random() * 1000000 + 1);//随机数，防止重复的name
+                newname = "new-policy" + randomNumber;
+                newcontent = "policy" + randomNumber + ".json";//叶节点的新content
+                //一个父策略下可以有n个子策略
+                //如果是第一个添加的节点
+                if (!treeNode.hasOwnProperty("children") || treeNode.children.length == 0) {
+                    treeNode.type = "op-and";//更改父策略
+                    newcontent = treeNode.content;//把原来父节点的.json赋给新建的子节点的content
+                    treeNode.content = newname;//然后父节点content需要清空并变成新叶节点的名字
+                } else {
+                    treeNode.content = treeNode.content + "," + newname;//在非首次添加子节点时，修改content
+                }
+                treeNode["build-in"] = false;
+                zTree.addNodes(treeNode, {
+                    //id: (100 + newCount),
+                    //pId: treeNode.id,
+                    name: newname,//否则会导致同名属性的覆盖
+                    type: "default", //提前设定type
+                    "built-in": "false",
+                    version: "v1.0",
+                    content: newcontent
+                });
+
+                newCount++;
+                return false;
+            });
+        }
+
+        function removeHoverDom(treeId, treeNode) {
+            $("#addBtn_" + treeNode.tId).unbind().remove();
+        }
+
+        function beforeRemove(treeId, treeNode) {
+            return confirm("确认删除节点 " + treeNode.name + " 吗？");
+        }
+
+        //决定是否显示删除按钮
+        function showRemoveBtn(treeId, treeNode) {
+            return !treeNode.isFirstNode;
+        }
+
+    </script>
+
+</head>
+<body>
+<div class="margin-left2">
+    <h1>策略树编辑器</h1>
+    <ul id="treeDemo" class="ztree"></ul>
+    <button class="btn btn-success margin-left-top" onclick="save()">保存</button>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">节点编辑器</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="modeleditor_name" class="col-sm-2 control-label">名字</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="modeleditor_name"
+                                       placeholder="例: custom-policy">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modeleditor_type" class="col-sm-2 control-label">类别</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="modeleditor_type">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modeleditor_builtin" class="col-sm-2 control-label">是否内置</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="modeleditor_builtin">
+                                    <option>true</option>
+                                    <option>false</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modeleditor_version" class="col-sm-2 control-label">版本</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="modeleditor_version"
+                                       placeholder="例: v1.0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modeleditor_content" class="col-sm-2 control-label">内容</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="modeleditor_content"
+                                       placeholder="例: policy.json">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="goto_policy_editor_btn" class="col-sm-2 control-label"> </label>
+                            <div class="col-sm-10">
+                                <button type="button" id="goto_policy_editor_btn" class="btn btn-primary"
+                                        onclick="jumpToPolicyEditor(user_id)" aria-hidden="true">编辑此策略
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- data-dismiss用于关闭对话框 -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="modeleditor_save" onclick="updateNode()">保存
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+</body>
+</html>

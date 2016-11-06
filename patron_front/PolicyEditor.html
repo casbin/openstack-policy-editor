@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <title>2.Patron策略编辑</title>
+    <script type="text/javascript" src="lib/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/dropdowns-enhancement.js"></script>
+    <link rel="stylesheet" href="lib/dropdowns-enhancement.css">
+    <link rel="stylesheet" href="PolicyEditor.css">
+    <script src="patron_parameters.js"></script>
+    <script src="PolicyEditor.js"></script>
+    <style>
+    </style>
+    <script>
+        /*
+         1.从JS读取二维数组，第一层是name,第二层是action，同时要保证更改第一个下拉菜单的时候第二个跟着变。用了第三方的库dropdown-enhancement
+         2.Value的话，前三个固定，第四部分需要从policy.json中除去带冒号的，剩下的key显示出来，内容显示在鼠标指上去的提示中。
+         */
+        // .load()方法，已经废弃，现在用来执行ajax操作。只有.on()和.onload
+        //$(document).ready()——网页中所有 DOM 结构绘制完毕后就执行，可能 DOM 元素关联的内容并没有加载完
+        //TODO 任意一个节点可以作为其他节点的rule，比如"compute:destroy":"rule:compute:create"这种。json可以为空
+        //TODO 因此，default虽然在代码中被分为了custom_rule，但是实际上还是可以引用其他的
+        var current_json = new Object();
+        var custom_rule = new Object();
+        var policy_name;
+        var user_id;
+        $(document).ready(function () {
+            policy_name = GetQueryString("policy_name");//从url中获取policy name
+            user_id = GetQueryString("user_id");//从url中获取user_id
+            //policy_name = "policy";
+            $("#name_menu").empty();
+            //为name菜单初始化菜单项
+            for (key in policy_array) {
+                $("#name_menu").append('<li><input type="radio" id="' + key + '"name="menu1" value="' + key + '" onclick="afterFirstSelectorChanged($(this).val())"><label for="' + key + '">' + key + '</label></li>');   //为Select追加一个Option(下拉项)
+            }
+            //选中第一个元素
+            $("#name_menu").find("li input").first().click();
+            //name菜单加载后，设置action菜单
+            $("#name_menu").on('load', afterFirstSelectorChanged($("#name_memu_btn").text().trim()));//加载之后设置action_menu
+            //当点击自定义规则中的输入框时，切换radio button的选中
+            $("#rule_value").focus(function () {
+                $("#rule_radio_3").click();
+            });
+            $.getJSON("json/" + policy_name, function (data) {
+                $.each(data, function (key, value) {//遍历属性
+                    if (key.indexOf(":") < 0) {
+                        //if (key.indexOf("context_is_admin") < 0) {
+                        custom_rule[key] = value;//为规则赋值,必须用[]
+                        //}
+                    } else {
+                        current_json[key] = value;
+                    }
+                });
+                //接下来给 自定义Rule子菜单赋值 并绑定点击事件
+                show_sub_rule_menu();
+
+                //接下来给列表赋值 并绑定点击事件
+                show_policy_list();
+                //接下来给自定义规则的列表赋值 并绑定点击事件
+                show_rule_list();
+
+            });
+
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            <h3>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <span class="label label-primary">策略名</span>
+                        <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" id="name_memu_btn">
+                                Option1
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu" id="name_menu">
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 move-to-left65">
+                        <span class="label label-primary">动作</span>
+                        <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" id="action_memu_btn">
+                                Option1
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu custom-menu-scroll" id="action_menu">
+                                //这里的scrollable设置一个350高的滚动条，也可以用pre-scrollable
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 move-to-left">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <span class="label label-primary">取值</span>
+                                <span class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"
+                            id="value_memu_btn">空<span class="caret"></span></button>
+                    <ul class="dropdown-menu" id="value_menu">
+                        <li><a onclick="afterThirdSelectorClicked($(this).text())" class="pointer-as-hand">空</a></li>
+                        <li class="divider"></li>
+                        <li><a onclick="afterThirdSelectorClicked($(this).text())"
+                               class="pointer-as-hand">is_admin:True</a></li>
+                        <li><a onclick="afterThirdSelectorClicked($(this).text())" class="pointer-as-hand">is_admin:False</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-submenu" id="value_sub_li"><a data-toggle="dropdown"
+                                                                          class="pointer-as-hand">自定义Rule</a>
+                            <ul class="dropdown-menu" id="value_sub_menu">
+                            </ul>
+                        </li>
+                    </ul>
+                </span>
+                            </div>
+                            <div class="col-lg-2 move-to-left">
+                        <span><button type="button" class="btn btn-success"
+                                      onclick="save_this_policy()">添加
+                        </button></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-1">
+            <br>
+            <h3><b>策略列表</b></h3>
+        </div>
+        <div class="col-lg-10">
+            <ul class="list-group custom-list-scroll" id="policy-list-group">
+            </ul>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+            <h3>
+                <form class="form-horizontal">
+                    <span class="label label-info">规则名</span>
+                    <input type="text" class="form-control input-width" id="rule_name" placeholder="规则名">
+
+                    <span class="label label-info marginLeftSmall">规则内容</span>
+                    <!--用inline可以控制行内显示-->
+                    <label class="small-text radio-inline"><input type="radio" name="rule_radio" id="rule_radio_1"
+                                                                  value="rule_radio_1" checked>is_admin:True</label>
+                    <label class="small-text radio-inline"><input type="radio" name="rule_radio" id="rule_radio_2"
+                                                                  value="rule_radio_2">is_admin:False</label>
+                    <label class="small-text radio-inline"><input type="radio" class="radio-inline1" name="rule_radio"
+                                                                  id="rule_radio_3"
+                                                                  value="rule_radio_3"></label>
+                    <input type="text" class="form-control input-width" id="rule_value" placeholder="自定义">
+                    <button type="button" class="btn btn-success marginLeftSmall" onclick="save_this_rule()">添加</button>
+                </form>
+            </h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-1">
+            <br>
+            <h3><b>自定义规则表</b></h3>
+        </div>
+        <div class="col-lg-10">
+            <ul class="list-group custom-list-scroll-small" id="rule-list-group">
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2 col-lg-offset-5">
+            <button type="button" class="btn btn-success marginLeftSmall"
+                    onclick="postPolicyToServer(user_id,policy_name)">保存并返回
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-var policy_array = { 
+var policy_array = {
     compute: ["create",
         "create:attach_network",
         "create:attach_volume",
@@ -18,7 +18,7 @@ var policy_array = {
         "volume_snapshot_create",
         "volume_snapshot_delete"
     ],
-
+    cells_scheduler_filter: ["TargetCellFilter"],
     compute_extension: [
         "accounts",
         "admin_actions",

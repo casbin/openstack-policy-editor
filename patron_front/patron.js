@@ -1,4 +1,4 @@
-function afterFirstSelectorChanged(key) {
+function afterFirstSelectorChanged(key) { 
     $("#action_menu").empty();
     //为啥用 policy_array.key不行：需要硬编码
     var first_array = policy_array[key];
