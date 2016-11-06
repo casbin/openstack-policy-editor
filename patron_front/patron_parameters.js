@@ -1,4 +1,4 @@
-var policy_array = {
+var policy_array = { 
     compute: ["create",
         "create:attach_network",
         "create:attach_volume",
