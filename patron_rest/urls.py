@@ -16,13 +16,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from patron_app.views import users
-from patron_app.views import metadata
-from patron_app.views import policy
+import patron_app.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^users/$', users),
-    url(r'^users/(\w+)/$', metadata),
-    url(r'^users/(\w+)/(.+)/$', policy),
+    url(r'^users/$', patron_app.views.users),
+    url(r'^users/(\w+)/$', patron_app.views.metadata),
+    url(r'^users/(\w+)/(.+)/$', patron_app.views.policy),
+    url(r'^Users.html', patron_app.views.frontend_userlist),
+    url(r'^MetadataTree.html', patron_app.views.frontend_metadata),
+    url(r'^PolicyEditor.html', patron_app.views.frontend_policyeditor),
 ]

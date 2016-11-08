@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 
 # Create your views here.
 
@@ -63,3 +63,15 @@ def policy(request, param1, param2):
         file_object.close()
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+def frontend_userlist(request):
+    return render_to_response('Users.html', locals())
+
+
+def frontend_metadata(request):
+    return render_to_response('MetadataTree.html', locals())
+
+
+def frontend_policyeditor(request):
+    return render_to_response('PolicyEditor.html', locals())
