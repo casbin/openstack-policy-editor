@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="MetadataTree.css" type="text/css">
     <script type="text/javascript" src="lib/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="MetadataTree.js"></script>
+    <script src="patron_parameters.js"></script>
     <!-- 新 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="lib/bootstrap.min.css">
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
@@ -44,8 +45,7 @@
         var realRootNode = new Object();
         $(document).ready(function () {
             user_id = GetQueryString("user_id");//从url中获取user_id，再拿去get
-            //TODO
-            $.getJSON("json/metadata.json", function (data) {
+            $.getJSON(base_url + "users/" + user_id, function (data) {
                 treedata = data;
                 rootNodeName = treedata["current-policy"];//拿到根节点名字
                 realRootNode = treedata[rootNodeName];

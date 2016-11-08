@@ -34,7 +34,7 @@
             //为name菜单初始化菜单项
             for (key in policy_array) {
                 $("#name_menu").append('<li><input type="radio" id="' + key + '"name="menu1" value="' + key + '" onclick="afterFirstSelectorChanged($(this).val())"><label for="' + key + '">' + key + '</label></li>');   //为Select追加一个Option(下拉项)
-            }
+            } 
             //选中第一个元素
             $("#name_menu").find("li input").first().click();
             //name菜单加载后，设置action菜单
@@ -43,7 +43,7 @@
             $("#rule_value").focus(function () {
                 $("#rule_radio_3").click();
             });
-            $.getJSON("json/" + policy_name, function (data) {
+            $.getJSON(base_url + "users/" + user_id + "/" + policy_name, function (data) {
                 $.each(data, function (key, value) {//遍历属性
                     if (key.indexOf(":") < 0) {
                         //if (key.indexOf("context_is_admin") < 0) {
@@ -73,7 +73,7 @@
             <h3>
                 <div class="row">
                     <div class="col-lg-4">
-                        <span class="label label-primary">策略名</span>
+                        <span class="label label-primary">动作集</span>
                         <div class="btn-group">
                             <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" id="name_memu_btn">
                                 Option1
