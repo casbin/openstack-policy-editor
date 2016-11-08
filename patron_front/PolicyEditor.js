@@ -125,7 +125,7 @@ function merge_rule_and_policy() {
 function postPolicyToServer(user_id, policy_name) {
     var json = merge_rule_and_policy();
     //以json格式发送就需要用stringify这个函数
-    $.post("http://osvt.net:3000/users/" + user_id + "/" + policy_name, JSON.stringify(json), function (data) {
+    $.post(base_url + "users/" + user_id + "/" + policy_name, JSON.stringify(json), function (data) {
         console.log("save_policy_success:" + policy_name + ":" + data);
         history.go(-1);
     }, "json");

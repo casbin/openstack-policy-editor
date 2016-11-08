@@ -34,7 +34,7 @@
             //为name菜单初始化菜单项
             for (key in policy_array) {
                 $("#name_menu").append('<li><input type="radio" id="' + key + '"name="menu1" value="' + key + '" onclick="afterFirstSelectorChanged($(this).val())"><label for="' + key + '">' + key + '</label></li>');   //为Select追加一个Option(下拉项)
-            } 
+            }
             //选中第一个元素
             $("#name_menu").find("li input").first().click();
             //name菜单加载后，设置action菜单
