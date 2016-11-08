@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^users/$', patron_app.views.users),
     url(r'^users/(\w+)/$', patron_app.views.metadata),
     url(r'^users/(\w+)/(.+)/$', patron_app.views.policy),
+    url(r'^(.*)$', patron_app.views.redirect_handler)
 ]
