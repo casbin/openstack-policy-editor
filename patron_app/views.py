@@ -49,13 +49,17 @@ def policy(request, param1, param2):
     if not os.path.exists(patron_dir + "/custom_policy/" + param1):
         return HttpResponse("The user doesn't exist, user = " + param1, content_type="text/html")
 
-    if not os.path.exists(patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"):
+    if os.path.exists(patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"):
+        policy_path = patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"
+    elif os.path.exists(patron_dir + "/" + param2 + ".json"):
+        policy_path = patron_dir + "/" + param2 + ".json"
+    else:
         return HttpResponse("The policy doesn't exist, user = " + param1 + ", policy = " + param2,
                             content_type="text/html")
 
-    print "open path = " + patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"
+    print "open path = " + policy_path
 
-    file_object = open(patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json", 'r')
+    file_object = open(policy_path, 'r')
 
     try:
         response_data = json.load(file_object)
