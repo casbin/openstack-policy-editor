@@ -35,13 +35,13 @@
 .custom-list-scroll {
     overflow: auto;
     width: auto;
-    height: 150px;
+    height: 380px;
 }
 
 .custom-list-scroll-small {
     overflow: auto;
     width: auto;
-    height: 130px;
+    height: 200px;
 }
 
 .pointer-as-hand {

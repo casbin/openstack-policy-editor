@@ -45,6 +45,7 @@
         $(document).ready(function () {
             user_id = GetQueryString("user_id");//从url中获取user_id，再拿去get
             //"json/metadata.json"
+            //base_url + "users/" + user_id
             $.getJSON(base_url + "users/" + user_id, function (data) {
                 treedata = data;
                 rootNodeName = treedata["current-policy"];//拿到根节点名字
@@ -55,7 +56,6 @@
                 zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, realRootNode);//显示树
                 //$("#selectAll").bind("click", selectAll);
                 zTreeObj.expandAll(true);//默认全部展开
-                showJSON("ready");
             });
         });
 
@@ -71,7 +71,7 @@
                 parentNode.type = "default";
                 parentNode.content = treeNode.content;
             } else if (parentNode.children.length >= 1) {
-                parentNode.content = deleteItemFromContent(parentNode.content, treeNode.name);//删除对应的name和逗号
+                parentNode.content = deleteItemFromContent(parentNode.content, treeNode.realName);//删除对应的name和逗号
             }
         }
 
@@ -85,6 +85,8 @@
             treeNode = zTreeObj.getNodeByTId(treeId);//通过id获取到节点
             if ($("#modeleditor_name").val() == "") {
                 alert("名字不能为空！");
+            } else if ($("#modeleditor_display_name").val() == "") {
+                alert("显示名称不能为空！");
             } else if ($("#modeleditor_content").val() == "") {
                 alert("content不能为空！");
             } else if ($("#modeleditor_type").val() == "default" && $("#modeleditor_content").val().indexOf(",") > -1) {//如果含逗号而且是default
@@ -103,14 +105,16 @@
             } else if (findIfExistDuplicatePolicyName($("#modeleditor_name").val())) {
                 alert('文件名已存在！请重新输入');
             } else {
-                tempName = treeNode.name;
-                treeNode.name = trimStr($("#modeleditor_name").val());
+                tempName = treeNode.realName;
+                treeNode.name= trimStr($("#modeleditor_display_name").val());
+                treeNode.realName = trimStr($("#modeleditor_name").val());
                 if (treeNode.getParentNode() != null) {//如果不是根节点
-                    treeNode.getParentNode().content = treeNode.getParentNode().content.replace(tempName, treeNode.name);//更新父节点的content中的name
+                    treeNode.getParentNode().content = treeNode.getParentNode().content.replace(tempName, treeNode.realName);//更新父节点的content中的name
                 }
                 treeNode.type = trimStr($("#modeleditor_type").val());
                 treeNode["built-in"] = trimStr($("#modeleditor_builtin").val());
                 treeNode.version = trimStr($("#modeleditor_version").val());
+                treeNode.description = trimStr($("#modeleditor_description").val());//描述
                 treeNode.content = trimStr($("#modeleditor_content").val());
                 zTreeObj.updateNode(treeNode);
                 alert("修改成功！");
@@ -119,7 +123,9 @@
         }
 
         function myOnDblClick(treeNode) {
-            $("#modeleditor_name").val(treeNode.name);
+            $("#modeleditor_name").val(treeNode.realName);
+            $("#modeleditor_display_name").val(treeNode.name);//name不是本来的名字，是显示用的名字
+            $("#modeleditor_description").val(treeNode.description);
             $("#modeleditor_type").empty();
             //根据op-or 和 op-and来决定选择框的选项，以及是否可编辑
             if (treeNode.type == "op-and" || treeNode.type == "op-or") {
@@ -181,6 +187,7 @@
                 var zTree = $.fn.zTree.getZTreeObj("treeDemo");
                 randomNumber = Math.floor(Math.random() * 1000000 + 1);//随机数，防止重复的name
                 newname = "new-policy" + randomNumber;
+                new_diaplay_name =  "策略"+ randomNumber;
                 newcontent = "policy" + randomNumber + ".json";//叶节点的新content
                 //一个父策略下可以有n个子策略
                 //如果是第一个添加的节点
@@ -195,7 +202,9 @@
                 zTree.addNodes(treeNode, {
                     //id: (100 + newCount),
                     //pId: treeNode.id,
-                    name: newname,//否则会导致同名属性的覆盖
+                    realName: newname,//否则会导致同名属性的覆盖
+                    name: new_diaplay_name,
+                    description:"默认描述",
                     type: "default", //提前设定type
                     "built-in": "false",
                     version: "v1.0",
@@ -254,6 +263,13 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="modeleditor_display_name" class="col-sm-2 control-label">显示名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="modeleditor_display_name"
+                                       placeholder="例: 云平台-限制">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="modeleditor_type" class="col-sm-2 control-label">类别</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="modeleditor_type">
@@ -274,6 +290,13 @@
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="modeleditor_version"
                                        placeholder="例: v1.0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modeleditor_description" class="col-sm-2 control-label">策略描述</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="modeleditor_description"
+                                       placeholder="例: 默认描述">
                             </div>
                         </div>
                         <div class="form-group">

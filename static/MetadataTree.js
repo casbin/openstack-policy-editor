@@ -7,6 +7,10 @@
 //zTree支持根节点为数组或对象(都可以)，此处选择根节点为对象
 
 function originTree2FormatTree(realRootNode) {
+    //因为zTree会把name属性作为节点名字，而实际上节点名字需要是display-name，因此需要转换下
+    realRootNode.realName = realRootNode.name;
+    realRootNode.name = realRootNode["display-name"];
+    delete realRootNode["display-name"];
     if (realRootNode["type"] == "op-and" || realRootNode["type"] == "op-or") {
         var childnames = realRootNode["content"].split(",");
         var child1name = trimStr(childnames[0]);
@@ -57,6 +61,11 @@ function changeChildrenToAttr(rootNode) {
     delete rootNode.check_Focus;
     delete rootNode.isHover;
     delete rootNode.editNameFlag;
+    //因为zTree会把name属性作为节点名字，而实际上节点名字需要是display-name，因此需要转换下。这里是转换回来
+    rootNode["display-name"] = rootNode.name;
+    rootNode.name = rootNode.realName;
+    delete rootNode.realName;
+
     var bool = true;
     if (rootNode.hasOwnProperty("children")) {
         if (rootNode.children.length >= 2 || rootNode.children.length == 0) {
