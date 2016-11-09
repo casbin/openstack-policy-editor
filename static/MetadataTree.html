@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <title>3.策略树编辑器</title>
     <link rel="stylesheet" href="zTreeStyle/zTreeStyle.css" type="text/css">
     <link rel="stylesheet" href="MetadataTree.css" type="text/css">
@@ -35,16 +35,16 @@
                 }
             },
             callback: {
+                beforeClick: myBeforeClick,
                 beforeRemove: beforeRemove,
-                onRemove: onRemove,
-                beforeCollapse: beforeCollapse,
-                onDblClick: myOnDblClick
+                onRemove: onRemove
             }
         };
 
         var realRootNode = new Object();
         $(document).ready(function () {
             user_id = GetQueryString("user_id");//从url中获取user_id，再拿去get
+            //"json/metadata.json"
             $.getJSON(base_url + "users/" + user_id, function (data) {
                 treedata = data;
                 rootNodeName = treedata["current-policy"];//拿到根节点名字
@@ -118,7 +118,7 @@
             }
         }
 
-        function myOnDblClick(event, treeId, treeNode) {
+        function myOnDblClick(treeNode) {
             $("#modeleditor_name").val(treeNode.name);
             $("#modeleditor_type").empty();
             //根据op-or 和 op-and来决定选择框的选项，以及是否可编辑
@@ -166,10 +166,15 @@
         var newCount = 1;
         function addHoverDom(treeId, treeNode) {
             var sObj = $("#" + treeNode.tId + "_span");
-            if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+            if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0||$("#editBtn_" + treeNode.tId).length > 0) return;
             var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-                    + "' title='add node' onfocus='this.blur();'></span>";
+                    + "' title='add node' onfocus='this.blur();'></span><span class='button edit' id='editBtn_" + treeNode.tId
+                    + "' title='edit node' onfocus='this.blur();'></span>";
             sObj.after(addStr);
+            var btn2 = $("#editBtn_" + treeNode.tId);
+            if (btn2) btn2.bind("click", function () {
+                myOnDblClick(treeNode);
+            });
             var btn = $("#addBtn_" + treeNode.tId);
             //点击事件
             if (btn) btn.bind("click", function () {
@@ -202,9 +207,16 @@
             });
         }
 
+        //不写这个会造成鼠标移走了但是图标还在
         function removeHoverDom(treeId, treeNode) {
             $("#addBtn_" + treeNode.tId).unbind().remove();
+            $("#editBtn_" + treeNode.tId).unbind().remove();
         }
+
+        //禁止选中
+        function myBeforeClick(treeId, treeNode, clickFlag) {
+            return false;
+        };
 
         function beforeRemove(treeId, treeNode) {
             return confirm("确认删除节点 " + treeNode.name + " 吗？");
