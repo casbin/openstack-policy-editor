@@ -67,4 +67,4 @@ def policy(request, param1, param2):
 
 
 def redirect_handler(request, param1):
-    return HttpResponseRedirect('static/' + param1)
+    return HttpResponseRedirect('static/' + param1 + '.html')
