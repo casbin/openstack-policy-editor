@@ -20,7 +20,7 @@ def users(request):
 
     files = os.listdir(patron_dir + "/custom_policy")
     i = 0
-    display_mames = ["张三", "李四", "王五"]
+    display_mames = ["云平台管理员Admin", "张三", "李四", "王五"]
     for f in files:
         print f
         tmp_user = {}
