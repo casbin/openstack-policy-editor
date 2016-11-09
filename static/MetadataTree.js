@@ -28,7 +28,7 @@ function originTree2FormatTree(realRootNode) {
 
 //将ztree格式转回metadata.json格式
 function formatZTreeToOriginTree(zTreeNodes) {
-    var root_policy_str = zTreeNodes["name"];
+    var root_policy_str = zTreeNodes["realName"];
     var rootNode = new Object();
     rootNode[root_policy_str] = zTreeNodes;
     rootNode["current-policy"] = root_policy_str;
@@ -71,7 +71,7 @@ function changeChildrenToAttr(rootNode) {
         if (rootNode.children.length >= 2 || rootNode.children.length == 0) {
             var arrays = rootNode.children;
             for (obj in arrays) {
-                name1 = arrays[obj].name;
+                name1 = arrays[obj].realName;
                 rootNode[name1] = arrays[obj];
                 bool = bool && changeChildrenToAttr(rootNode[name1]);
             }

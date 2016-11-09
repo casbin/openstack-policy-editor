@@ -57,6 +57,15 @@
                 //$("#selectAll").bind("click", selectAll);
                 zTreeObj.expandAll(true);//默认全部展开
             });
+            //当type改变的时候，设定按钮的显示与否
+            $("#modeleditor_type").on('change',function () {
+                type = $("#modeleditor_type").val();
+                if (type == "op-and" || type == "op-or" || type == "all-pass" || type == "all-forbid" ) {
+                    $("#goto_policy_editor_btn").hide();
+                } else {
+                    $("#goto_policy_editor_btn").show();
+                }
+            });
         });
 
         function beforeCollapse(treeId, treeNode) {
@@ -79,6 +88,8 @@
             return false;
         }
 
+
+
         //在修改的时候修改父节点的content,也要在添加的时候修改父节点的content。
         //使用zTree规定的方法来修改节点信息
         function updateNode(treeId) {
@@ -87,7 +98,7 @@
                 alert("名字不能为空！");
             } else if ($("#modeleditor_display_name").val() == "") {
                 alert("显示名称不能为空！");
-            } else if ($("#modeleditor_content").val() == "") {
+            } else if ($("#modeleditor_content").val() == "" && $("#modeleditor_type").val() != "all-pass"  && $("#modeleditor_type").val() != "all-forbid" ) {
                 alert("content不能为空！");
             } else if ($("#modeleditor_type").val() == "default" && $("#modeleditor_content").val().indexOf(",") > -1) {//如果含逗号而且是default
                 alert("单文件名中不能含有逗号！");//不可以重名，因为每个的name都是父对象的属性名，重名会相互覆盖的
@@ -116,6 +127,12 @@
                 treeNode.version = trimStr($("#modeleditor_version").val());
                 treeNode.description = trimStr($("#modeleditor_description").val());//描述
                 treeNode.content = trimStr($("#modeleditor_content").val());
+
+                //如果是all-forbid或者all-pass就清空content
+                if($("#modeleditor_type").val() == "all-forbid" || $("#modeleditor_type").val() == "all-pass"){
+                    treeNode.content = "";
+                }
+
                 zTreeObj.updateNode(treeNode);
                 alert("修改成功！");
                 $('#myModal').modal("hide");//关闭模态框
@@ -134,7 +151,8 @@
                 $("#modeleditor_type").removeAttr("disabled");
             } else {
                 $("#modeleditor_type").append("<option value='default'>default</option>");
-                $("#modeleditor_type").attr("disabled", "disabled");
+                $("#modeleditor_type").append("<option value='all-pass'>all-pass</option>");
+                $("#modeleditor_type").append("<option value='all-forbid'>all-forbid</option>");
             }
             $("#modeleditor_type").val(treeNode.type);
 
@@ -156,7 +174,7 @@
             }
 
             //隐藏/显示 编辑按钮
-            if (treeNode.type == "op-and" || treeNode.type == "op-or") {
+            if (treeNode.type == "op-and" || treeNode.type == "op-or" || treeNode.type == "all-pass" || treeNode.type == "all-forbid" ) {
                 $("#goto_policy_editor_btn").hide();
             } else {
                 $("#goto_policy_editor_btn").show();
