@@ -14,7 +14,7 @@
     <script src="lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="ztree_js/jquery.ztree.all.min.js"></script>
     <script>
-        var user_id = "85c8848b1dd64c7ebb2c5baeb12e25c3";
+        var user_id;
         //TODO 最好不要有重名的json
         var treedata;
         var zTreeObj;
@@ -67,10 +67,6 @@
                 }
             });
         });
-
-        function beforeCollapse(treeId, treeNode) {
-            return false;
-        }
 
         //如果删除后没有子节点，就把子节点的content给父节点，父节点type变为default
         //如果删除后还有子节点，就把父节点的content去掉本节点的名字
@@ -183,6 +179,32 @@
             //设置按钮的回调
             $("#modeleditor_save").attr('onclick', 'updateNode("' + treeNode.tId + '")');
 
+            //非管理员built-in属性不可以改。
+            if(!isAdmin()) {
+                $("#modeleditor_builtin").attr("disabled", "disabled");
+            }
+            //如果Built-in是true，则非管理员不可以修改属性，不可以编辑JSON。
+            if(!isAdmin() && treeNode["built-in"]=="true") {
+                $("#modeleditor_type").attr("disabled", "disabled");
+                $("#modeleditor_name").attr("disabled", "disabled");
+                $("#modeleditor_display_name").attr("disabled", "disabled");
+                $("#modeleditor_description").attr("disabled", "disabled");
+                $("#modeleditor_version").attr("disabled", "disabled");
+                $("#modeleditor_content").attr("disabled", "disabled");
+                $("#goto_policy_editor_btn").attr("disabled", "disabled");
+                $("#modeleditor_save").attr("disabled", "disabled");
+            }else{
+                $("#modeleditor_type").removeAttr("disabled");
+                $("#modeleditor_name").removeAttr("disabled");
+                $("#modeleditor_display_name").removeAttr("disabled");
+                $("#modeleditor_description").removeAttr("disabled");
+                $("#modeleditor_version").removeAttr("disabled");
+                $("#goto_policy_editor_btn").removeAttr("disabled");
+                $("#modeleditor_save").removeAttr("disabled");
+                if(treeNode.type == "op-and" || treeNode.type == "op-or")
+                    $("#modeleditor_content").removeAttr("disabled");
+            }
+
             $('#myModal').modal();//最后打开模态对话框
         }
 
@@ -199,9 +221,15 @@
             if (btn2) btn2.bind("click", function () {
                 myOnDblClick(treeNode);
             });
+
             var btn = $("#addBtn_" + treeNode.tId);
             //点击事件
             if (btn) btn.bind("click", function () {
+                //如果这个节点是built-in，就不可以增加子节点
+                if(!isAdmin() && treeNode["built-in"] == "true" ) {
+                    alert("内置节点不可修改！");
+                    return;
+                }
                 var zTree = $.fn.zTree.getZTreeObj("treeDemo");
                 randomNumber = Math.floor(Math.random() * 1000000 + 1);//随机数，防止重复的name
                 newname = "new-policy" + randomNumber;
@@ -246,7 +274,13 @@
         };
 
         function beforeRemove(treeId, treeNode) {
-            return confirm("确认删除节点 " + treeNode.name + " 吗？");
+            //它自己不是管理员，而且是built-in或者它的父节点是built-in的情况下都不可以删
+            if(!isAdmin() && (treeNode["built-in"] == "true" || treeNode.getParentNode()["built-in"] == "true" )) {
+                alert("内置节点不可修改！");
+                return false;
+            }
+            else
+                return confirm("确认删除节点 " + treeNode.name + " 吗？");
         }
 
         //决定是否显示删除按钮

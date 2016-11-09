@@ -38,6 +38,11 @@ function formatZTreeToOriginTree(zTreeNodes) {
         return false;
 }
 
+//判断user_id是否全部为0
+function isAdmin(){
+    return /^0+$/ig.test(user_id);
+}
+
 //递归删除多余属性，把children数组变成一个个属性.同时检查是否有单子节点的children数组.
 function changeChildrenToAttr(rootNode) {
     //删除一些属性
