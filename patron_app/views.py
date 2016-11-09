@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 
@@ -18,11 +20,12 @@ def users(request):
 
     files = os.listdir(patron_dir + "/custom_policy")
     i = 0
+    display_mames = ["张三", "李四", "王五"]
     for f in files:
         print f
         tmp_user = {}
         tmp_user['id'] = f
-        tmp_user['name'] = "user " + str(i)
+        tmp_user['name'] = display_mames[i]
         response_data.append(tmp_user)
         i += 1
 
