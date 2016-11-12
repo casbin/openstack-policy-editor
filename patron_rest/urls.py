@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^users/$', patron_app.views.users),
     url(r'^users/(\w+)/$', patron_app.views.metadata),
     url(r'^users/(\w+)/(.+)/$', patron_app.views.policy),
+    url(r'^reset/$', patron_app.views.reset),
     url(r'^(.*).html$', patron_app.views.redirect_handler)
 ]
