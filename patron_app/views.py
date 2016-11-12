@@ -75,17 +75,29 @@ def policy(request, param1, param2):
         return HttpResponse("The policy doesn't exist, user = " + param1 + ", policy = " + param2,
                             content_type="text/html")
 
-    print "open path = " + policy_path
+    if request.method == 'GET':
+        print "method = " + request.method + ", file to read = " + policy_path
+        file_object = open(policy_path, 'r')
+        try:
+            response_data = json.load(file_object)
+            # metadata_text = file_object.read()
+        finally:
+            file_object.close()
 
-    file_object = open(policy_path, 'r')
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    elif request.method == 'POST':
+        print "method = " + request.method + ", file to write = " + policy_path
+        file_object = open(policy_path, 'w')
+        try:
+            request_data = json.loads(request.body)
+            json.dumps(file_object, request_data)
+        finally:
+            file_object.close()
 
-    try:
-        response_data = json.load(file_object)
-        # metadata_text = file_object.read()
-    finally:
-        file_object.close()
-
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+            return HttpResponse("POST policy succeeds", content_type="text/html")
+    else:
+        print "Unsupported method = " + request.method
+        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
 
 def reset(request):
