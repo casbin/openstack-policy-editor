@@ -8,6 +8,7 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 import json
 import os
+import shutil
 
 patron_dir = "C:/etc/patron"
 
@@ -71,6 +72,17 @@ def policy(request, param1, param2):
         file_object.close()
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+def reset(request):
+    shutil.rmtree(patron_dir)
+    print "deleted " + patron_dir
+
+    patron_copy_dir = patron_dir + "_copy"
+    shutil.copytree(patron_copy_dir, patron_dir)
+    print "copied from " + patron_copy_dir + " to " + patron_dir
+
+    return HttpResponse("Reset succeeds", content_type="text/html")
 
 
 def redirect_handler(request, param1):
