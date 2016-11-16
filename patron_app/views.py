@@ -110,7 +110,7 @@ def reset(request):
     shutil.copytree(patron_copy_dir, patron_dir)
     print "copied from " + patron_copy_dir + " to " + patron_dir
 
-    return HttpResponse("{\"status\":\"success\"}", content_type="text/html")
+    return HttpResponse("{\"status\":\"success\"}", content_type="application/json")
 
 
 def redirect_handler(request, param1):
