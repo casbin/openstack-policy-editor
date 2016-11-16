@@ -52,8 +52,9 @@ def metadata(request, param1):
         print "method = " + request.method + ", file to write = " + metadata_path
         file_object = open(metadata_path, 'w')
         try:
-            request_data = json.loads(request.body)
-            json.dumps(file_object, request_data)
+            tmp = json.loads(request.body)
+            jstr = json.dumps(tmp, ensure_ascii=False, indent=4)
+            file_object.write(jstr.encode('utf-8'))
         finally:
             file_object.close()
 
@@ -89,8 +90,9 @@ def policy(request, param1, param2):
         print "method = " + request.method + ", file to write = " + policy_path
         file_object = open(policy_path, 'w')
         try:
-            request_data = json.loads(request.body)
-            json.dumps(file_object, request_data)
+            tmp = json.loads(request.body)
+            jstr = json.dumps(tmp, ensure_ascii=False, indent=4)
+            file_object.write(jstr.encode('utf-8'))
         finally:
             file_object.close()
 
