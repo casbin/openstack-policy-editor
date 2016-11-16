@@ -128,7 +128,7 @@ function postPolicyToServer(user_id, policy_name) {
     //以json格式发送就需要用stringify这个函数
     $.post(base_url + "users/" + user_id + "/" + policy_name+"/", JSON.stringify(json), function (data) {
         //console.log("save_policy_success:" + policy_name + ":" + data);
-        alert("保存成功"); 
+        alert("保存成功");
         //history.go(-1);
     }, "json");
 }

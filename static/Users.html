@@ -17,6 +17,14 @@
             });
         });
 
+        function reset(){
+            $.get()
+            $.post(base_url + "reset", function (data) {
+                alert("重置成功");
+                location.reload(true);
+            }, "json");
+        }
+
         //跳转
         function jumpToMetadataPage(user_id) {
             location.href = "MetadataTree.html?user_id=" + user_id;
@@ -27,6 +35,9 @@
             cursor: pointer;
         }
 
+        .marginLeftSmall {
+            margin-left: 29px;
+        }
         /*当鼠标指上去的时候变灰*/
         li.list-group-item:hover,
         li.list-group-item:focus {
@@ -58,6 +69,13 @@
         <div class="col-lg-4 col-lg-offset-4">
             <ul class="list-group custom-list-scroll" id="user-list-group">
             </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2 col-lg-offset-5">
+            <button type="button" class="btn btn-success marginLeftSmall"
+                    onclick="reset()">重置
+            </button>
         </div>
     </div>
 </div>
