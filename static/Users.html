@@ -18,11 +18,10 @@
         });
 
         function reset(){
-            $.get()
-            $.post(base_url + "reset", function (data) {
+            $.getJSON(base_url + "reset", function (data) {
                 alert("重置成功");
-                location.reload(true);
-            }, "json");
+                location.reload(true); 
+            });
         }
 
         //跳转
@@ -36,7 +35,7 @@
         }
 
         .marginLeftSmall {
-            margin-left: 29px;
+            margin-left: 50px;
         }
         /*当鼠标指上去的时候变灰*/
         li.list-group-item:hover,
