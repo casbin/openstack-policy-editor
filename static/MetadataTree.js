@@ -105,7 +105,7 @@ function save() {
         alert("任意父节点不能仅有一个子节点，请重新检查！");
     $.post(base_url + "users/" + user_id+"/", JSON.stringify(treedata), function (data) {
         console.log("save_tree_success:");
-        history.go(-1);
+        //history.go(-1);
     }, "json");
     console.log(JSON.stringify(treedata));
 }

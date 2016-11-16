@@ -58,7 +58,7 @@ def metadata(request, param1):
         finally:
             file_object.close()
 
-            return HttpResponse("POST metadata succeeds", content_type="text/html")
+            return HttpResponse("{\"status\":\"success\"}", content_type="text/html")
     else:
         print "Unsupported method = " + request.method
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
@@ -96,7 +96,7 @@ def policy(request, param1, param2):
         finally:
             file_object.close()
 
-            return HttpResponse("POST policy succeeds", content_type="text/html")
+            return HttpResponse("{\"status\":\"success\"}", content_type="text/html")
     else:
         print "Unsupported method = " + request.method
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
@@ -110,7 +110,7 @@ def reset(request):
     shutil.copytree(patron_copy_dir, patron_dir)
     print "copied from " + patron_copy_dir + " to " + patron_dir
 
-    return HttpResponse("Reset succeeds", content_type="text/html")
+    return HttpResponse("{\"status\":\"success\"}", content_type="text/html")
 
 
 def redirect_handler(request, param1):

@@ -35,6 +35,7 @@
                 }
             },
             callback: {
+                beforeDrag: myBeforeDrag,
                 beforeClick: myBeforeClick,
                 beforeRemove: beforeRemove,
                 onRemove: onRemove
@@ -80,11 +81,13 @@
             }
         }
 
-        function showRenameBtn(treeId, treeNode) {
+        function myBeforeDrag(treeId, treeNodes) {
             return false;
         }
 
-
+        function showRenameBtn(treeId, treeNode) {
+            return false;
+        }
 
         //在修改的时候修改父节点的content,也要在添加的时候修改父节点的content。
         //使用zTree规定的方法来修改节点信息
