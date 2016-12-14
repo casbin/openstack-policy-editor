@@ -25,7 +25,7 @@ SECRET_KEY = 'kt=76mr6%(pq9!koih3qz!)exahf*fj(ny9s5f7snk#d_(2i73'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['osvt.net', '127.0.0.1']
 
 
 # Application definition

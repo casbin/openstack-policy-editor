@@ -1,4 +1,4 @@
-var base_url = "http://127.0.0.1:3000/";
+var base_url = "http://osvt.net:3000/";
 var policy_array = {
     compute: ["create",
         "create:attach_network",
