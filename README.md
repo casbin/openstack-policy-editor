@@ -6,6 +6,9 @@ A RESTful API for Patron UI.
 1. GET ``/users``: Get all users, each user has an ID and a name.
 2. GET ``/<USER_ID>``: Get the ``metadata.json`` for a user ``<USER_ID>``.
 3. GET ``/<USER_ID>/<POLICY_NAME>``: Get the ``<POLICY_NAME>.json`` for a user ``<USER_ID>``.
+4. POST ``/<USER_ID>``: Set the ``metadata.json`` for a user ``<USER_ID>``.
+5. POST ``/<USER_ID>/<POLICY_NAME>``: Set the ``<POLICY_NAME>.json`` for a user ``<USER_ID>``.
+6. GET ``/reset``: Reset all data to the initial state.
 
 ## Examples
 
