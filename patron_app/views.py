@@ -117,4 +117,4 @@ def redirect_handler(request, param1):
     return HttpResponseRedirect('static/' + param1 + '.html')
 
 def mainpage_handler(request):
-    return HttpResponseRedirect('static/Users.html')
+    return HttpResponseRedirect('static/Portal.html')
