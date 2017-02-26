@@ -7,28 +7,6 @@
     <link rel="stylesheet" href="lib/bootstrap.min.css">
     <script src="patron_parameters.js"></script>
     <script src="lib/bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $.getJSON(base_url + "users/", function (data) {
-                $("#user-list-group").empty();
-                for (obj in data) {
-                    $("#user-list-group").append('<li class="list-group-item pointer-as-hand center-text" onclick="jumpToMetadataPage(\'' + data[obj].id + '\')">' + data[obj].name + '</li>');
-                }
-            });
-        });
-
-        function reset(){
-            $.getJSON(base_url + "reset", function (data) {
-                alert("重置成功");
-                location.reload(true);
-            });
-        }
-
-        //跳转
-        function jumpToMetadataPage(user_id) {
-            location.href = "MetadataTree.html?user_id=" + user_id;
-        }
-    </script>
     <style>
         .pointer-as-hand {
             cursor: pointer;
@@ -52,7 +30,7 @@
         .custom-list-scroll {
             overflow: auto;
             width: auto;
-            height: 180px;
+            height: 280px;
         }
     </style>
 </head>
@@ -60,14 +38,18 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-2 col-lg-offset-5">
-            <span class="center-text"><h2><b>安全模块</b></h2></span>
+            <span class="center-text"><h2><b>安全功能</b></h2></span>
         </div>
     </div>
     <br>
     <div class="row">
         <div class="col-lg-4 col-lg-offset-4">
             <ul class="list-group custom-list-scroll" id="user-list-group">
-				<li class="list-group-item pointer-as-hand center-text" onclick=window.open("Users.html")>1. Patron策略编辑器</li>
+				<li class="list-group-item pointer-as-hand center-text" onclick=window.open("Users.html")>1. OpenStack访问控制策略编辑器</li>
+				<li class="list-group-item pointer-as-hand center-text" onclick=window.open("")>2. OpenStack轻量级证实服务</li>
+				<li class="list-group-item pointer-as-hand center-text" onclick=window.open("")>3. OpenStack社区安全信息库</li>
+				<li class="list-group-item pointer-as-hand center-text" onclick=window.open("")>4. OpenStack最小特权策略框架</li>
+				<li class="list-group-item pointer-as-hand center-text" onclick=window.open("")>5. AWS、OpenStack虚拟机同驻检测工具</li>
             </ul>
         </div>
     </div>
