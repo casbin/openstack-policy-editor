@@ -1,0 +1,30 @@
+{
+	"current-policy": "and-policy",
+	"and-policy": {
+		"name": "and-policy",
+		"display-name": "云平台-逻辑与",
+		"description": "表示逻辑上的and, 该策略允许一个请求，当且仅当所有子策略都允许该请求。",
+		"type": "op-and",
+		"built-in": "true",
+		"version": "v1.0",
+		"content": "restrict-policy, enable-policy",
+		"restrict-policy": {
+			"name": "restrict-policy",
+			"display-name": "云平台-限制",
+			"description": "云平台通过该策略限制该租户访问其他租户的资源。",
+			"type": "default",
+			"built-in": "true",
+			"version": "v1.0",
+			"content": "policy.json"
+		},
+		"enable-policy": {
+			"name": "enable-policy",
+			"display-name": "云平台-授予必要权限",
+			"description": "云平台通过该策略授予该租户一些必要的权限，比如自身租户策略编辑权限，防止租户在策略上的误操作。",
+			"type": "default",
+			"built-in": "true",
+			"version": "v1.0",
+			"content": "enable.json"
+		}
+	}
+}

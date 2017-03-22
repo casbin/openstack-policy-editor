@@ -10,8 +10,8 @@ import json
 import os
 import shutil
 
-patron_dir = "C:/etc/patron"
-
+# patron_dir = "C:/etc/patron"
+patron_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\patron"
 
 def users(request):
     if request.method != "GET":

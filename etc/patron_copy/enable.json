@@ -1,0 +1,8 @@
+{
+    "context_is_admin":  "role:admin",
+    "admin_or_owner":  "is_admin:True or project_id:%(project_id)s",
+    "project_admin": "is_admin:True or (project_id:%(project_id)s and role:admin)",
+
+    "access:set_policy": "rule:project_admin",
+    "access:get_policy": "rule:project_admin"
+}
