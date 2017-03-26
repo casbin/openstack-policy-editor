@@ -24,10 +24,10 @@ def tenants(request):
     display_mames = ["Admin（云平台管理员）", "张三", "李四", "王五"]
     for f in files:
         print f
-        tmp_user = {}
-        tmp_user['id'] = f
-        tmp_user['name'] = display_mames[i]
-        response_data.append(tmp_user)
+        tmp_tenant = {}
+        tmp_tenant['id'] = f
+        tmp_tenant['name'] = display_mames[i]
+        response_data.append(tmp_tenant)
         i += 1
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -35,7 +35,7 @@ def tenants(request):
 
 def metadata(request, param1):
     if not os.path.exists(patron_dir + "/custom_policy/" + param1):
-        return HttpResponse("The user doesn't exist, user = " + param1, content_type="text/html")
+        return HttpResponse("The tenant doesn't exist, tenant = " + param1, content_type="text/html")
     metadata_path = patron_dir + "/custom_policy/" + param1 + "/metadata.json"
 
     if request.method == 'GET':
@@ -66,14 +66,14 @@ def metadata(request, param1):
 
 def policy(request, param1, param2):
     if not os.path.exists(patron_dir + "/custom_policy/" + param1):
-        return HttpResponse("The user doesn't exist, user = " + param1, content_type="text/html")
+        return HttpResponse("The tenant doesn't exist, tenant = " + param1, content_type="text/html")
 
     if os.path.exists(patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"):
         policy_path = patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"
     elif os.path.exists(patron_dir + "/" + param2 + ".json"):
         policy_path = patron_dir + "/" + param2 + ".json"
     else:
-        return HttpResponse("The policy doesn't exist, user = " + param1 + ", policy = " + param2,
+        return HttpResponse("The policy doesn't exist, tenant = " + param1 + ", policy = " + param2,
                             content_type="text/html")
 
     if request.method == 'GET':
