@@ -33,10 +33,10 @@ def tenants(request):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
-def metadata(request, param1):
-    if not os.path.exists(patron_dir + "/custom_policy/" + param1):
-        return HttpResponse("The tenant doesn't exist, tenant = " + param1, content_type="text/html")
-    metadata_path = patron_dir + "/custom_policy/" + param1 + "/metadata.json"
+def metadata(request, tenant_id):
+    if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
+        return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
+    metadata_path = patron_dir + "/custom_policy/" + tenant_id + "/metadata.json"
 
     if request.method == 'GET':
         print "method = " + request.method + ", file to read = " + metadata_path
@@ -64,16 +64,16 @@ def metadata(request, param1):
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
 
-def policy(request, param1, param2):
-    if not os.path.exists(patron_dir + "/custom_policy/" + param1):
-        return HttpResponse("The tenant doesn't exist, tenant = " + param1, content_type="text/html")
+def policy(request, tenant_id, policy_name):
+    if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
+        return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
-    if os.path.exists(patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"):
-        policy_path = patron_dir + "/custom_policy/" + param1 + "/" + param2 + ".json"
-    elif os.path.exists(patron_dir + "/" + param2 + ".json"):
-        policy_path = patron_dir + "/" + param2 + ".json"
+    if os.path.exists(patron_dir + "/custom_policy/" + tenant_id + "/" + policy_name + ".json"):
+        policy_path = patron_dir + "/custom_policy/" + tenant_id + "/" + policy_name + ".json"
+    elif os.path.exists(patron_dir + "/" + policy_name + ".json"):
+        policy_path = patron_dir + "/" + policy_name + ".json"
     else:
-        return HttpResponse("The policy doesn't exist, tenant = " + param1 + ", policy = " + param2,
+        return HttpResponse("The policy doesn't exist, tenant = " + tenant_id + ", policy = " + policy_name,
                             content_type="text/html")
 
     if request.method == 'GET':
@@ -102,14 +102,14 @@ def policy(request, param1, param2):
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
 
-def users(request, param1):
+def users(request, tenant_id):
     if request.method != "GET":
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
-    if not os.path.exists(patron_dir + "/custom_policy/" + param1):
-        return HttpResponse("The tenant doesn't exist, tenant = " + param1, content_type="text/html")
+    if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
+        return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
-    userlist_path = patron_dir + "/custom_policy/" + param1 + "/" + "users.txt"
+    userlist_path = patron_dir + "/custom_policy/" + tenant_id + "/" + "users.txt"
     print "method = " + request.method + ", file to read = " + userlist_path
     file_object = open(userlist_path, 'r')
 
@@ -118,17 +118,14 @@ def users(request, param1):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
-def command(request, param1, param2, param3):
+def command(request, tenant_id, user_name, command):
     if request.method != "GET":
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
-    if not os.path.exists(patron_dir + "/custom_policy/" + param1):
-        return HttpResponse("The tenant doesn't exist, tenant = " + param1, content_type="text/html")
+    if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
+        return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
-    tenant_id = param1
-    user = param2
-    command = param3
-    print "method = " + request.method + ", tenant = " + tenant_id + ", user = " + user + "command to run = " + command
+    print "method = " + request.method + ", tenant = " + tenant_id + ", user = " + user_name + "command to run = " + command
 
     response_data = command + ": OK"
 
@@ -146,8 +143,8 @@ def reset(request):
     return HttpResponse("{\"status\":\"success\"}", content_type="application/json")
 
 
-def redirect_handler(request, param1):
-    return HttpResponseRedirect('static/' + param1 + '.html')
+def redirect_handler(request, url_path):
+    return HttpResponseRedirect('static/' + url_path + '.html')
 
 def mainpage_handler(request):
     return HttpResponseRedirect('static/Portal.html')
