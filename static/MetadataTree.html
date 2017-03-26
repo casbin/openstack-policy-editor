@@ -46,8 +46,8 @@
         $(document).ready(function () {
             user_id = GetQueryString("user_id");//从url中获取user_id，再拿去get
             //"json/metadata.json"
-            //base_url + "users/" + user_id
-            $.getJSON(base_url + "users/" + user_id, function (data) {
+            //base_url + "tenants/" + user_id
+            $.getJSON(base_url + "tenants/" + user_id, function (data) {
                 treedata = data;
                 rootNodeName = treedata["current-policy"];//拿到根节点名字
                 realRootNode = treedata[rootNodeName];

@@ -20,9 +20,9 @@ import patron_app.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^users/$', patron_app.views.users),
-    url(r'^users/(\w+)/$', patron_app.views.metadata),
-    url(r'^users/(\w+)/(.+)/$', patron_app.views.policy),
+    url(r'^tenants/$', patron_app.views.tenants),
+    url(r'^tenants/(\w+)/$', patron_app.views.metadata),
+    url(r'^tenants/(\w+)/(.+)/$', patron_app.views.policy),
     url(r'^reset/$', patron_app.views.reset),
     url(r'^(.*).html$', patron_app.views.redirect_handler),
     url(r'^$', patron_app.views.mainpage_handler)

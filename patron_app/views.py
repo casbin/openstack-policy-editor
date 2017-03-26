@@ -1,7 +1,6 @@
 # coding=utf-8
 
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, render_to_response
 
 # Create your views here.
 
@@ -13,7 +12,8 @@ import shutil
 # patron_dir = "C:/etc/patron"
 patron_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\patron"
 
-def users(request):
+
+def tenants(request):
     if request.method != "GET":
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
