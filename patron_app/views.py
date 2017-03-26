@@ -21,7 +21,7 @@ def tenants(request):
 
     files = os.listdir(patron_dir + "/custom_policy")
     i = 0
-    display_mames = ["Admin（云平台管理员）", "张三", "李四", "王五"]
+    display_mames = ["Admins（云平台管理员）", "企业A", "企业B", "企业C"]
     for f in files:
         print f
         tmp_tenant = {}
@@ -100,6 +100,39 @@ def policy(request, param1, param2):
     else:
         print "Unsupported method = " + request.method
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+
+
+def users(request, param1):
+    if request.method != "GET":
+        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+
+    if not os.path.exists(patron_dir + "/custom_policy/" + param1):
+        return HttpResponse("The tenant doesn't exist, tenant = " + param1, content_type="text/html")
+
+    userlist_path = patron_dir + "/custom_policy/" + param1 + "/" + "users.txt"
+    print "method = " + request.method + ", file to read = " + userlist_path
+    file_object = open(userlist_path, 'r')
+
+    response_data = file_object.read().split(",")
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+def command(request, param1, param2, param3):
+    if request.method != "GET":
+        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+
+    if not os.path.exists(patron_dir + "/custom_policy/" + param1):
+        return HttpResponse("The tenant doesn't exist, tenant = " + param1, content_type="text/html")
+
+    tenant_id = param1
+    user = param2
+    command = param3
+    print "method = " + request.method + ", tenant = " + tenant_id + ", user = " + user + "command to run = " + command
+
+    response_data = command + ": OK"
+
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 def reset(request):
