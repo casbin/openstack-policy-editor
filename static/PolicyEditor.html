@@ -43,7 +43,7 @@
             $("#rule_value").focus(function () {
                 $("#rule_radio_3").click();
             });
-            $.getJSON(base_url + "tenants/" + tenant_id + "/" + policy_name, function (data) {
+            $.getJSON(base_url + "tenants/" + tenant_id + "/policies/" + policy_name, function (data) {
                 $.each(data, function (key, value) {//遍历属性
                     if (key.indexOf(":") < 0) {
                         //if (key.indexOf("context_is_admin") < 0) {
