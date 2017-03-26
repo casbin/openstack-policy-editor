@@ -38,9 +38,9 @@ function formatZTreeToOriginTree(zTreeNodes) {
         return false;
 }
 
-//判断user_id是否全部为0
+//判断tenant_id是否全部为0
 function isAdmin(){
-    return /^0+$/ig.test(user_id);
+    return /^0+$/ig.test(tenant_id);
 }
 
 //递归删除多余属性，把children数组变成一个个属性.同时检查是否有单子节点的children数组.
@@ -100,7 +100,7 @@ function save() {
     var deepCopyOfTree = $.extend(true, {}, zTreeObj.getNodes()[0]);//深复制
     treedata = formatZTreeToOriginTree(deepCopyOfTree);
     if (treedata != false) {
-        $.post(base_url + "tenants/" + user_id+"/", JSON.stringify(treedata), function (data) {
+        $.post(base_url + "tenants/" + tenant_id + "/", JSON.stringify(treedata), function (data) {
             console.log("save_tree_success:");
             //history.go(-1);
         }, "json");
@@ -131,9 +131,9 @@ function deleteItemFromContent(content, item) {
 }
 
 //跳转
-function jumpToPolicyEditor(user_id) {
+function jumpToPolicyEditor(tenant_id) {
     policyname = trimStr($("#modeleditor_content").val()).replace(".json", "");//获取json名
-    location.href = "PolicyEditor.html?policy_name=" + policyname + "&user_id=" + user_id;
+    location.href = "PolicyEditor.html?policy_name=" + policyname + "&tenant_id=" + tenant_id;
 }
 
 function trimStr(str) {

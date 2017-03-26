@@ -14,7 +14,7 @@
     <script src="lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="ztree_js/jquery.ztree.all.min.js"></script>
     <script>
-        var user_id;
+        var tenant_id;
         //TODO 最好不要有重名的json
         var treedata;
         var zTreeObj;
@@ -44,10 +44,10 @@
 
         var realRootNode = new Object();
         $(document).ready(function () {
-            user_id = GetQueryString("user_id");//从url中获取user_id，再拿去get
+            tenant_id = GetQueryString("tenant_id");//从url中获取tenant_id，再拿去get
             //"json/metadata.json"
-            //base_url + "tenants/" + user_id
-            $.getJSON(base_url + "tenants/" + user_id, function (data) {
+            //base_url + "tenants/" + tenant_id
+            $.getJSON(base_url + "tenants/" + tenant_id, function (data) {
                 treedata = data;
                 rootNodeName = treedata["current-policy"];//拿到根节点名字
                 realRootNode = treedata[rootNodeName];
@@ -365,7 +365,7 @@
                             <label for="goto_policy_editor_btn" class="col-sm-2 control-label"> </label>
                             <div class="col-sm-10">
                                 <button type="button" id="goto_policy_editor_btn" class="btn btn-primary"
-                                        onclick="jumpToPolicyEditor(user_id)" aria-hidden="true">编辑此策略
+                                        onclick="jumpToPolicyEditor(tenant_id)" aria-hidden="true">编辑此策略
                                 </button>
                             </div>
                         </div>

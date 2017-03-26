@@ -25,10 +25,10 @@
         var current_json = new Object();
         var custom_rule = new Object();
         var policy_name;
-        var user_id;
+        var tenant_id;
         $(document).ready(function () {
             policy_name = GetQueryString("policy_name");//从url中获取policy name
-            user_id = GetQueryString("user_id");//从url中获取user_id
+            tenant_id = GetQueryString("tenant_id");//从url中获取tenant_id
             //policy_name = "policy";
             $("#name_menu").empty();
             //为name菜单初始化菜单项
@@ -43,7 +43,7 @@
             $("#rule_value").focus(function () {
                 $("#rule_radio_3").click();
             });
-            $.getJSON(base_url + "tenants/" + user_id + "/" + policy_name, function (data) {
+            $.getJSON(base_url + "tenants/" + tenant_id + "/" + policy_name, function (data) {
                 $.each(data, function (key, value) {//遍历属性
                     if (key.indexOf(":") < 0) {
                         //if (key.indexOf("context_is_admin") < 0) {
@@ -175,7 +175,7 @@
     <div class="row">
         <div class="col-lg-2 col-lg-offset-5">
             <button type="button" class="btn btn-success marginLeftSmall"
-                    onclick="postPolicyToServer(user_id,policy_name)">保存
+                    onclick="postPolicyToServer(tenant_id, policy_name)">保存
             </button>
         </div>
     </div>

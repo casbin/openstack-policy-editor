@@ -122,11 +122,11 @@ function merge_rule_and_policy() {
 }
 
 //post并后退
-function postPolicyToServer(user_id, policy_name) {
+function postPolicyToServer(tenant_id, policy_name) {
     var json = merge_rule_and_policy();
     alert(JSON.stringify(json));
     //以json格式发送就需要用stringify这个函数
-    $.post(base_url + "tenants/" + user_id + "/" + policy_name+"/", JSON.stringify(json), function (data) {
+    $.post(base_url + "tenants/" + tenant_id + "/" + policy_name + "/", JSON.stringify(json), function (data) {
         //console.log("save_policy_success:" + policy_name + ":" + data);
         alert("保存成功");
         //history.go(-1);
