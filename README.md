@@ -17,5 +17,9 @@ A RESTful API for Patron UI.
 1. http://osvt.net:3000/tenants
 2. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3
 3. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/policies/custom-policy
+4. http://osvt.net:3000/tenants/00000000000000000000000000000000/users
 4. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users
-5. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user1/commands/test
+5. http://osvt.net:3000/tenants/00000000000000000000000000000000/users/admin/commands/nova%20service-list
+5. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user1/commands/nova%20service-list
+5. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user1/commands/nova%20list
+5. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user2/commands/nova%20list

@@ -8,9 +8,17 @@ from django.http import HttpResponse
 import json
 import os
 import shutil
+import uuid
+import time
 
 # patron_dir = "C:/etc/patron"
 patron_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\patron"
+
+admin_tenant_id = "00000000000000000000000000000000"
+
+
+def get_403_error():
+    return "ERROR (Forbidden): Policy doesn't allow this operation to be performed. (HTTP 403) (Request-ID: req-%s)" % uuid.uuid4()
 
 
 def tenants(request):
@@ -112,8 +120,8 @@ def users(request, tenant_id):
     userlist_path = patron_dir + "/custom_policy/" + tenant_id + "/" + "users.txt"
     print "method = " + request.method + ", file to read = " + userlist_path
     file_object = open(userlist_path, 'r')
-
-    response_data = file_object.read().split(",")
+    user_list = file_object.read().split(",")
+    response_data = user_list
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -125,11 +133,47 @@ def command(request, tenant_id, user_name, command):
     if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
         return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
-    print "method = " + request.method + ", tenant = " + tenant_id + ", user = " + user_name + "command to run = " + command
+    userlist_path = patron_dir + "/custom_policy/" + tenant_id + "/" + "users.txt"
+    print "method = " + request.method + ", file to read = " + userlist_path
+    file_object = open(userlist_path, 'r')
+    user_list = file_object.read().split(",")
+    if user_name not in user_list:
+        return HttpResponse("The user doesn't exist, tenant = " + tenant_id + ", user = " + user_name, content_type="text/html")
 
-    response_data = command + ": OK"
+    print "method = " + request.method + ", tenant = " + tenant_id + ", user = " + user_name + ", command to run = " + command
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    time.sleep(1)
+
+    if tenant_id != admin_tenant_id:
+        if command == "nova service-list":
+            response_data = get_403_error()
+            return HttpResponse(response_data, content_type="text/plain")
+
+        if user_name == "user2":
+            response_data = get_403_error()
+            return HttpResponse(response_data, content_type="text/plain")
+
+    if command == "nova list":
+        response_data = \
+'''+--------------------------------------+-------------------+---------+------------+-------------+-------------------------+
+| ID                                   | Name              | Status  | Task State | Power State | Networks                |
++--------------------------------------+-------------------+---------+------------+-------------+-------------------------+
+| 5b7e5d93-4676-473a-9161-4dc3ac46ce76 | provider-instance | SHUTOFF | -          | Shutdown    | provider=192.168.41.107 |
++--------------------------------------+-------------------+---------+------------+-------------+-------------------------+'''
+    elif command == "nova service-list":
+        response_data = \
+'''+----+------------------+------------+----------+---------+-------+----------------------------+-----------------+
+| Id | Binary           | Host       | Zone     | Status  | State | Updated_at                 | Disabled Reason |
++----+------------------+------------+----------+---------+-------+----------------------------+-----------------+
+| 1  | nova-scheduler   | controller | internal | enabled | up    | 2017-03-26T03:31:27.000000 | -               |
+| 2  | nova-consoleauth | controller | internal | enabled | up    | 2017-03-26T03:31:28.000000 | -               |
+| 3  | nova-conductor   | controller | internal | enabled | up    | 2017-03-26T03:31:27.000000 | -               |
+| 6  | nova-compute     | compute1   | nova     | enabled | down  | 2017-03-23T15:24:08.000000 | -               |
++----+------------------+------------+----------+---------+-------+----------------------------+-----------------+'''
+    else:
+        response_data = get_403_error()
+
+    return HttpResponse(response_data, content_type="text/plain")
 
 
 def reset(request):
