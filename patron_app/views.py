@@ -29,12 +29,12 @@ def tenants(request):
 
     files = os.listdir(patron_dir + "/custom_policy")
     i = 0
-    display_mames = ["Admins（云平台管理员）", "企业A", "企业B", "企业C"]
+    display_names = ["Admins（云平台管理员）", "企业A", "企业B", "企业C"]
     for f in files:
         print f
         tmp_tenant = {}
         tmp_tenant['id'] = f
-        tmp_tenant['name'] = display_mames[i]
+        tmp_tenant['name'] = display_names[i]
         response_data.append(tmp_tenant)
         i += 1
 
@@ -160,6 +160,7 @@ def command(request, tenant_id, user_name, command):
 +--------------------------------------+-------------------+---------+------------+-------------+-------------------------+
 | 5b7e5d93-4676-473a-9161-4dc3ac46ce76 | provider-instance | SHUTOFF | -          | Shutdown    | provider=192.168.41.107 |
 +--------------------------------------+-------------------+---------+------------+-------------+-------------------------+'''
+        return HttpResponse(response_data, content_type="text/plain")
     elif command == "nova service-list":
         response_data = \
 '''+----+------------------+------------+----------+---------+-------+----------------------------+-----------------+
@@ -170,10 +171,10 @@ def command(request, tenant_id, user_name, command):
 | 3  | nova-conductor   | controller | internal | enabled | up    | 2017-03-26T03:31:27.000000 | -               |
 | 6  | nova-compute     | compute1   | nova     | enabled | down  | 2017-03-23T15:24:08.000000 | -               |
 +----+------------------+------------+----------+---------+-------+----------------------------+-----------------+'''
+        return HttpResponse(response_data, content_type="text/plain")
     else:
         response_data = get_403_error()
-
-    return HttpResponse(response_data, content_type="text/plain")
+        return HttpResponse(response_data, content_type="text/plain")
 
 
 def reset(request):

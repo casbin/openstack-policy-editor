@@ -1,0 +1,21 @@
+.container {
+    width: 99%;
+}
+/* 修改全局默认字体，首选苹果字体 */
+body {
+    font-family: "苹方-简", pingfang_custom, glyphicons, "Microsoft YaHei UI", '宋体', Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif !important;
+    /*font-weight: 900 !important;  模仿苹果的粗细*/
+}
+
+/*自定义字体，Mac上的苹方字体*/
+@font-face {
+    font-family: pingfang_custom;
+    src: url('../fonts/pingfang.ttf');//字体路径
+}
+
+.input-group{
+    margin:10px 0px;//输入框上下外边距为10px,左右为0px
+}
+h6{
+    color:#ff0000;
+}

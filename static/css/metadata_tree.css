@@ -1,0 +1,34 @@
+.ztree li span.button.add {
+    margin-left: 2px;
+    margin-right: -1px;
+    background-position: -144px 0;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.centers {
+    width: 100%;
+    height: auto;
+    vertical-align: middle; /*设置vertical-align: middle，相对同一级别元素中线对齐*/
+    margin: 0px;
+    border: none;
+    padding: 0px;
+}
+
+.margin-left {
+    margin-left: 16%;
+}
+
+.margin-left2 {
+    margin-left: 40vw;
+}
+
+.margin-left-top {
+     margin-left: 3%;
+     margin-top: 1%;
+ }
+
+.margin-left-top2 {
+    margin-left: 2%;
+    margin-top: 1%;
+}

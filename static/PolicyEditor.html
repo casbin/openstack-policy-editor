@@ -2,15 +2,18 @@
 <html lang="cn">
 <head>
     <meta charset="UTF-8">
-    <title>2.Patron策略编辑</title>
+    <title>Patron策略编辑</title>
     <script type="text/javascript" src="lib/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="lib/jquery-confirm.css"/>
+    <script type="text/javascript" src="lib/jquery-confirm.min.js"></script>
     <script src="lib/bootstrap.min.js"></script>
     <script src="lib/dropdowns-enhancement.js"></script>
     <link rel="stylesheet" href="lib/dropdowns-enhancement.css">
-    <link rel="stylesheet" href="PolicyEditor.css">
-    <script src="patron_parameters.js"></script>
-    <script src="PolicyEditor.js"></script>
+    <link rel="stylesheet" href="css/policy_editor.css">
+    <script src="js/patron_parameters.js"></script>
+    <script src="js/policy_editor.js"></script>
     <style>
     </style>
     <script>
@@ -26,9 +29,60 @@
         var custom_rule = new Object();
         var policy_name;
         var tenant_id;
+        function _and() {
+            var result_formula = "";
+            if ($("#formula").val() != "")
+                result_formula = $("#formula").val() + " and ";
+
+
+            var value;
+            if ($('#target_vm').is(':checked')) { //判断哪个被选中
+                value = "target_id:" + $("#target_vm_name").val();
+            } else if ($('#target_user').is(':checked')) {
+                value = "user_id:" + $("#target_user_name").val();
+            } else if ($('#target_value').is(':checked')) {
+                value = $("#value_menu_btn").text().trim();
+                value = (value == "空" ? "" : value);
+            }
+
+            $("#formula").val(result_formula + value);
+            /*
+             //判断规则名是否为空
+             if (name == "") {
+             alert("请输入规则名");
+             return;
+             }
+             if (name.indexOf(":") != -1) {
+             alert("规则名中禁止出现冒号");
+             return;
+             }*/
+
+        }
+
+
+        function _or() {
+            var result_formula = "";
+            if ($("#formula").val() != "")
+                result_formula = $("#formula").val() + " or ";
+
+
+            var value;
+            if ($('#target_vm').is(':checked')) { //判断哪个被选中
+                value = "target_id:" + $("#target_vm_name").val();
+            } else if ($('#target_user').is(':checked')) {
+                value = "user_id:" + $("#target_user_name").val();
+            } else if ($('#target_value').is(':checked')) {
+                value = $("#value_menu_btn").text().trim();
+            }
+
+            $("#formula").val(result_formula + value);
+        }
+
         $(document).ready(function () {
             policy_name = GetQueryString("policy_name");//从url中获取policy name
             tenant_id = GetQueryString("tenant_id");//从url中获取tenant_id
+            tenant_name = GetQueryString("tenant_name");//从url中获取tenant_id，再拿去get
+            $("#username").text(tenant_name);
             //policy_name = "policy";
             $("#name_menu").empty();
             //为name菜单初始化菜单项
@@ -40,8 +94,21 @@
             //name菜单加载后，设置action菜单
             $("#name_menu").on('load', afterFirstSelectorChanged($("#name_memu_btn").text().trim()));//加载之后设置action_menu
             //当点击自定义规则中的输入框时，切换radio button的选中
+            $("#value_menu_btn").focus(function () {
+                $("#value_radio_1").click();
+            });
             $("#rule_value").focus(function () {
                 $("#rule_radio_3").click();
+            });
+            $("#target_vm_name").focus(function () {
+                $("#value_radio_2").click();
+            });
+            $("#target_user_name").focus(function () {
+                $("#value_radio_2").click();
+            });
+
+            $("#formula").focus(function () {
+                $("#value_radio_3").click();
             });
             $.getJSON(base_url + "tenants/" + tenant_id + "/policies/" + policy_name, function (data) {
                 $.each(data, function (key, value) {//遍历属性
@@ -67,79 +134,115 @@
     </script>
 </head>
 <body>
+
+
+<ol class="breadcrumb" style="font-size: medium;padding:10px 20px;">
+    <li><a href="Tenant.html">租户列表</a></li>
+    <li><a href="javascript:history.go(-1)">策略树编辑器</a></li>
+    <li class="active">Patron策略编辑器</li>
+    <span class="username">您好，<span id="username"></span></span>
+</ol>
+
 <div class="container">
-    <div class="row">
-        <div class="col-lg-10 col-lg-offset-1">
-            <h3>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <span class="label label-primary">动作集</span>
-                        <div class="btn-group">
-                            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" id="name_memu_btn">
-                                Option1
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu" id="name_menu">
-                            </ul>
-                        </div>
+    <h3 style="text-align: center;margin-top: 1vh;margin-bottom: 1vh"><b>策略列表</b></h3>
+    <h3>
+        <form class="form-horizontal">
+            <div class="row">
+                <div class="col-lg-7" style=";margin-right: 0;padding-right: 0">
+                    <span class="label label-primary">动作集:动作</span>
+                    <div class="btn-group">
+                        <button data-toggle="dropdown"
+                                style="width: 15vw; white-space:nowrap;overflow:hidden;text-overflow:ellipsis; "
+                                class="btn btn-default dropdown-toggle"
+                                id="name_memu_btn">
+                            Option1
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu" id="name_menu">
+                        </ul>
                     </div>
-                    <div class="col-lg-5 move-to-left65">
-                        <span class="label label-primary">动作</span>
-                        <div class="btn-group">
-                            <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" id="action_memu_btn">
-                                Option1
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu custom-menu-scroll" id="action_menu">
-                                //这里的scrollable设置一个350高的滚动条，也可以用pre-scrollable
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 move-to-left">
-                        <div class="row">
-                            <div class="col-lg-10">
-                                <span class="label label-primary">取值</span>
-                                <span class="btn-group">
-                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"
-                            id="value_memu_btn">空<span class="caret"></span></button>
-                    <ul class="dropdown-menu" id="value_menu">
-                        <li><a onclick="afterThirdSelectorClicked($(this).text())" class="pointer-as-hand">空</a></li>
-                        <li class="divider"></li>
-                        <li><a onclick="afterThirdSelectorClicked($(this).text())"
-                               class="pointer-as-hand">is_admin:True</a></li>
-                        <li><a onclick="afterThirdSelectorClicked($(this).text())" class="pointer-as-hand">is_admin:False</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-submenu" id="value_sub_li"><a data-toggle="dropdown"
-                                                                          class="pointer-as-hand">自定义Rule</a>
-                            <ul class="dropdown-menu" id="value_sub_menu">
-                            </ul>
-                        </li>
-                    </ul>
-                </span>
-                            </div>
-                            <div class="col-lg-2 move-to-left">
-                        <span><button type="button" class="btn btn-success"
-                                      onclick="save_this_policy()">添加
-                        </button></span>
-                            </div>
-                        </div>
+                    <div class="btn-group">
+                        <button data-toggle="dropdown"
+                                style="width: 25vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; "
+                                class="btn btn-default dropdown-toggle"
+                                id="action_memu_btn">
+                            Option1
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu custom-menu-scroll" id="action_menu">
+                            //这里的scrollable设置一个350高的滚动条，也可以用pre-scrollable
+                        </ul>
                     </div>
                 </div>
-            </h3>
-        </div>
-    </div>
+            </div>
+            <div class="row" style="margin-top: 1.5vh">
+                <div class="col-lg-12">
+                    <div class="label label-primary" style="">取值</div>
+                    <input type="radio" name="rule_radio2"
+                           id="value_radio_1"
+                           class="radio-inline1"
+                           value="value_radio_1" checked>
+                    <span class="btn-group">
+                                    <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"
+                                            style="width: 8vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; "
+                                            id="value_menu_btn">空<span class="caret"></span></button>
+                                    <ul class="dropdown-menu" id="value_menu">
+                                        <li><a onclick="afterThirdSelectorClicked($(this).text())"
+                                               class="pointer-as-hand">空</a></li>
+                                        <li class="divider"></li>
+                                        <li><a onclick="afterThirdSelectorClicked($(this).text())"
+                                               class="pointer-as-hand">&nbsp;is_admin:True</a></li>
+                                        <li><a onclick="afterThirdSelectorClicked($(this).text())"
+                                               class="pointer-as-hand">&nbsp;is_admin:False</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-submenu" id="value_sub_li"><a data-toggle="dropdown"
+                                                                                          class="pointer-as-hand">自定义规则表</a>
+                                            <ul class="dropdown-menu" id="value_sub_menu">
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </span>
+                    <input type="radio"
+                           style="margin-left: 1vw"
+                           name="rule_radio2"
+                           id="value_radio_2"
+                           value="value_radio_2"><label class="small-text">&nbsp;Target_id & User_id:</label>
+                    <input type="text" class="form-control input-width2"
+                           style="margin-top:0;margin-bottom:0;vertical-align:middle !important"
+                           id="target_vm_name" placeholder="vm1">
+                    <label class="small-text">&</label>
+                    <input type="text" class="form-control input-width2"
+                           style="vertical-align:middle !important" id="target_user_name" placeholder="zhb">
+
+                    <input type="radio"
+                           style="margin-left: 1vw"
+                           name="rule_radio2"
+                           id="value_radio_3"
+                           value="value_radio_3">
+                    <span style="padding-left: 0;margin-left: 0">
+
+                        <label class="small-text">自定义:</label>
+                        <input type="text" style="width: 16vw !important;"
+                               class="form-control"
+                               id="formula"
+                               placeholder="">
+                        <span><button id="add_formula_to_list" type="button" class="btn btn-success"
+                                      onclick="save_this_policy()">添加到策略列表
+                        </button></span>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </h3>
 
     <div class="row">
-        <div class="col-lg-1">
-            <br>
-            <h3><b>策略列表</b></h3>
-        </div>
-        <div class="col-lg-10">
+        <div class="col-lg-12">
             <ul class="list-group custom-list-scroll" id="policy-list-group">
             </ul>
         </div>
     </div>
-    <hr>
+
+    <h3 style="text-align: center;margin-top: 1vh;margin-bottom: 1vh"><b>自定义规则表</b></h3>
     <div class="row">
-        <div class="col-lg-10 col-lg-offset-1">
+        <div class="col-lg-12">
             <h3>
                 <form class="form-horizontal">
                     <span class="label label-info">规则名</span>
@@ -147,14 +250,15 @@
 
                     <span class="label label-info marginLeftSmall">规则内容</span>
                     <!--用inline可以控制行内显示-->
-                    <label class="small-text radio-inline"><input type="radio" name="rule_radio" id="rule_radio_1"
-                                                                  value="rule_radio_1" checked>is_admin:True</label>
-                    <label class="small-text radio-inline"><input type="radio" name="rule_radio" id="rule_radio_2"
-                                                                  value="rule_radio_2">is_admin:False</label>
-                    <label class="small-text radio-inline"><input type="radio" class="radio-inline1" name="rule_radio"
-                                                                  id="rule_radio_3"
-                                                                  value="rule_radio_3"></label>
-                    <input type="text" class="form-control input-width" id="rule_value" placeholder="自定义">
+                    <input type="radio" name="rule_radio" id="rule_radio_1"
+                           value="rule_radio_1" checked><label class="radio-inline small-text">is_admin:True</label>
+                    <input type="radio" name="rule_radio" id="rule_radio_2"
+                           value="rule_radio_2"><label class="radio-inline small-text">is_admin:False</label>
+                    <input type="radio" class="radio-inline1" name="rule_radio"
+                           id="rule_radio_3"
+                           value="rule_radio_3">
+                    <input type="text" class="form-control input-width" style="vertical-align: middle" id="rule_value"
+                           placeholder="自定义">
                     <button type="button" class="btn btn-success marginLeftSmall" onclick="save_this_rule()">添加</button>
                 </form>
             </h3>
@@ -162,22 +266,17 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-1">
-            <br>
-            <h3><b>自定义规则表</b></h3>
-        </div>
-        <div class="col-lg-10">
+        <div class="col-lg-12">
             <ul class="list-group custom-list-scroll-small" id="rule-list-group">
             </ul>
         </div>
     </div>
+    <hr>
 
-    <div class="row">
-        <div class="col-lg-2 col-lg-offset-5">
-            <button type="button" class="btn btn-success marginLeftSmall"
-                    onclick="postPolicyToServer(tenant_id, policy_name)">保存
-            </button>
-        </div>
+    <div style="text-align: center;padding-top:1vh;padding-bottom: 2vh">
+        <button type="button" class="btn btn-success btn-block"
+                onclick="postPolicyToServer(tenant_id, policy_name)">保存
+        </button>
     </div>
 </div>
 </body>

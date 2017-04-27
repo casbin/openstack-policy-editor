@@ -1,0 +1,117 @@
+#center {
+    margin: auto;
+    position: absolute;
+    height: 30%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.marginLeft {
+    margin-left: 2.7vw;
+}
+
+.marginLeftSmall {
+    margin-left: 1.6vw;
+}
+
+.radio-inline1 {
+    position: relative !important;
+    vertical-align:middle !important;
+    top: 50% !important;
+}
+
+.form-control {
+    width: 10vw;
+    display: inline;
+}
+
+/* 限制滚动条区域 */
+.custom-menu-scroll {
+    overflow-y: auto;
+    width: 100%;
+    max-height: 30vh;
+}
+
+.custom-list-scroll {
+    overflow: auto;
+    width: auto;
+    max-height: 50vh;
+}
+
+.custom-list-scroll-small {
+    overflow: auto;
+    width: auto;
+    max-height: 40vh;
+}
+
+.pointer-as-hand {
+    cursor: pointer;
+}
+
+.delete-btn {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    float: right;
+}
+
+.small-text {
+    font-size: large;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    font-weight: 400;
+    padding-left: 0vw;
+    padding-right: 0vw;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    vertical-align: middle;
+}
+
+.move-to-left65 {
+    margin-left: -4vw;
+}
+
+.move-to-left {
+    margin-left: -1.5vw;
+}
+
+.input-width {
+    width: 16vw;
+    height: 2.5em;
+}
+
+.input-width2 {
+    width: 6vw;
+    height: 2.5em;
+}
+
+.key-color {
+    color: purple;
+}
+
+.value-color {
+    color: darkgreen;
+}
+
+/*当鼠标指上去的时候变灰*/
+li.list-group-item:hover,
+li.list-group-item:focus {
+    color: #555;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+
+.center-title {
+    display: table;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.too-much-text{
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+}

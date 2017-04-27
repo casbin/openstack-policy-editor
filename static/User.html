@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <title>2.用户列表页</title>
+    <!-- favicon -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
+    <link rel="bookmark" href="images/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
+    <script type="text/javascript" src="lib/jquery-3.1.1.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="js/patron_parameters.js"></script>
+    <script src="js/login.js"></script>
+    <script src="lib/jquery.autocomplete.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/jquery.autocomplete.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="lib/jquery-confirm.css"/>
+    <script type="text/javascript" src="lib/jquery-confirm.min.js"></script>
+    <style>
+    </style>
+    <script>
+        var tenant_id;
+        var command_list = ["nova list", "nova service-list"];
+        $(document).ready(function () {
+            tenant_id = GetQueryString("tenant_id");//从url中获取tenant_id，再拿去get
+
+            $.getJSON(base_url + "tenants/" + tenant_id + "/users/", function (data) {
+                $("#user-list-group").empty();
+                //为何这里用for in 不行？
+                for (var i = 0; i < data.length; i++) {
+                    $("#user-list-group").append('<li class="list-group-item pointer-as-hand center-text" onclick="executeCommand(\'' + data[i] + '\')">' + data[i] + '<span class="glyphicon glyphicon-chevron-right" style="float: right;margin-right: 0px"></span></li>');
+                }
+            });
+        });
+        function reset() {
+            $.getJSON(base_url + "reset", function (data) {
+                niceAlert("重置成功",true);
+                location.reload(true);
+            });
+        }
+
+        function trimArray(array) {
+            for (var i = 0; i < array.length; i++) {
+                array[i] = trim(array[i]);
+            }
+            return array;
+        }
+        //跳转
+        function executeCommand(user_id) {
+            $.confirm({
+                title: "执行命令",
+                content: '' +
+                '<form action="" class="formName">' +
+                '<div class="form-group">' +
+                '<label class="control-label">Command</label>' +
+                '<input type="text" id="command_input" class="form-control"" required />' +
+                '<br/><label class="control-label">Result</label>' +
+                '<div id="command_result"> </div>' +
+                '</div>' +
+                '</form>',
+                animation: 'top',
+                closeAnimation: 'bottom',
+                columnClass: 'col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1',
+                buttons: {
+                    formSubmit: {
+                        text: "提交",
+                        btnClass: 'btn-green',
+                        action: function () {
+                            var input = this.$content.find('#command_input').val();
+                            $.get(base_url + "tenants/" + tenant_id + "/users/" + user_id + "/commands/" + input,
+                                function (data, status) {
+                                    //把制表符格式的转化为数组
+                                    if (!data.startsWith("ERROR")) {
+                                        var lines = data.split("\n");
+                                        for (var i = 0; i < lines.length; i++) {
+                                            if (lines[i].startsWith("+"))
+                                                lines.splice(i--, 1);
+                                        }
+                                        var titles = lines.shift();//剔除第一个并返回
+                                        titles = titles.substring(1, titles.length - 1).split("|");//每个列的列名,[id,name]这种
+                                        var dataLines = lines;//一行行的数据
+                                        for (var i = 0; i < dataLines.length; i++) {
+                                            dataLines[i] = trimArray(dataLines[i].substring(1, dataLines[i].length - 1).split("|"));
+                                        }
+                                        titles = trimArray(titles);
+
+                                        var table_head_start = '<table class="table table-bordered table-condensed table-striped"><thead>';
+                                        var table_head = "";
+                                        titles.forEach(function (element) {
+                                            table_head = table_head + "<th>" + element + "</th>";
+                                        })
+                                        var table_head_end = '</thead><tbody>';
+                                        var list_html_body = "";
+                                        dataLines.forEach(function (element) {
+                                            list_html_body = list_html_body + "<tr>" + JSON.stringify(element).replace(/","/g, "</td><td>").replace(/\["/g, "<td>").replace(/"]/g, "</td>") + "</tr>";
+                                        })
+                                        var list_html_foot = '</tbody></table>';
+                                        var result = table_head_start + table_head + table_head_end + list_html_body + list_html_foot;
+                                        $('#command_result').html(result);
+                                    } else {
+                                        $('#command_result').html(data);
+                                    }
+                                });
+                            return false;
+                        }
+                    },
+                    cancel: {
+                        btnClass: 'btn-red',
+                        text: "取消",
+                        action: function () {
+                            //close
+                        },
+                    }
+                },
+                onContentReady: function () {
+                    // bind to events
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                    });
+                    //先初始化
+                    $("#command_input").autocomplete({
+                        source: [[]]
+                    });
+                    $("#command_input").autocomplete('setSource', command_list, 1);//必须加第三个参数否则会错我也不知为什么
+                }
+            });
+        }
+    </script>
+    <style>
+        .pointer-as-hand {
+            cursor: pointer;
+        }
+
+        .marginLeftSmall {
+            margin-left: 50px;
+        }
+
+        /*当鼠标指上去的时候变灰*/
+        li.list-group-item:hover,
+        li.list-group-item:focus {
+            color: #555;
+            text-decoration: none;
+            background-color: #f5f5f5;
+        }
+
+        .center-text {
+            text-align: center
+        }
+
+        .custom-list-scroll {
+            overflow: auto;
+            width: auto;
+            height: 180px;
+        }
+    </style>
+</head>
+<body>
+
+<ol class="breadcrumb" style="font-size: medium;padding:10px 20px;">
+    <li><a href="Tenant.html">租户列表</a></li>
+    <li class="active">用户列表</li>
+</ol>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2 col-lg-offset-5">
+            <span class="center-text"><h2><b>用户列表</b></h2></span>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-4">
+            <ul class="list-group custom-list-scroll" id="user-list-group">
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
