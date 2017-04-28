@@ -1,5 +1,4 @@
-var base_url = "http://osvt.net:3000/";
-//var base_url = "http://osvt.net:3000/";
+//var getBaseUrl()+"/" = "http://osvt.net:3000/";
 
 //睡眠一段时间的函数
 function sleep(startMs,sleepDurationMs){
@@ -49,6 +48,16 @@ function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
     if (r != null)return unescape(r[2]);
+    return null;
+}
+
+//从url中获取getBaseUrl()+"/"
+function getBaseUrl() {
+    var reg = new RegExp("//(.+?)/");
+    var r = document.URL.match(reg);
+    if (r != null) {
+        return "http://"+unescape(r[1]);
+    }
     return null;
 }
 

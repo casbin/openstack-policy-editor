@@ -55,8 +55,8 @@
             tenant_name = GetQueryString("tenant_name");//从url中获取tenant_id，再拿去get
             $("#username").text(tenant_name);
             //"json/metadata.json"
-            //base_url + "tenants/" + tenant_id
-            $.getJSON(base_url + "tenants/" + tenant_id, function (data) {
+            //getBaseUrl()+"/" + "tenants/" + tenant_id
+            $.getJSON(getBaseUrl()+"/" + "tenants/" + tenant_id, function (data) {
                 treedata = data;
                 rootNodeName = treedata["current-policy"];//拿到根节点名字
                 realRootNode = treedata[rootNodeName];

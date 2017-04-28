@@ -25,7 +25,7 @@
         $(document).ready(function () {
             tenant_id = GetQueryString("tenant_id");//从url中获取tenant_id，再拿去get
 
-            $.getJSON(base_url + "tenants/" + tenant_id + "/users/", function (data) {
+            $.getJSON(getBaseUrl()+"/" + "tenants/" + tenant_id + "/users/", function (data) {
                 $("#user-list-group").empty();
                 //为何这里用for in 不行？
                 for (var i = 0; i < data.length; i++) {
@@ -34,7 +34,7 @@
             });
         });
         function reset() {
-            $.getJSON(base_url + "reset", function (data) {
+            $.getJSON(getBaseUrl()+"/" + "reset", function (data) {
                 niceAlert("重置成功",true);
                 location.reload(true);
             });
@@ -68,7 +68,7 @@
                         btnClass: 'btn-green',
                         action: function () {
                             var input = this.$content.find('#command_input').val();
-                            $.get(base_url + "tenants/" + tenant_id + "/users/" + user_id + "/commands/" + input,
+                            $.get(getBaseUrl()+"/" + "tenants/" + tenant_id + "/users/" + user_id + "/commands/" + input,
                                 function (data, status) {
                                     //把制表符格式的转化为数组
                                     if (!data.startsWith("ERROR")) {

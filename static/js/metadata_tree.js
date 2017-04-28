@@ -107,7 +107,7 @@ function save() {
     var deepCopyOfTree = $.extend(true, {}, zTreeObj.getNodes()[0]);//深复制
     treedata = formatZTreeToOriginTree(deepCopyOfTree);
     if (treedata != false) {
-        $.post(base_url + "tenants/" + tenant_id + "/", JSON.stringify(treedata), function (data) {
+        $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/", JSON.stringify(treedata), function (data) {
             //history.go(-1);
         }, "json");
         console.log(JSON.stringify(treedata));

@@ -198,7 +198,7 @@ function postPolicyToServer(tenant_id, policy_name) {
     var json = merge_rule_and_policy();
     alert(JSON.stringify(json));
     //以json格式发送就需要用stringify这个函数
-    $.post(base_url + "tenants/" + tenant_id + "/policies/" + policy_name + "/", JSON.stringify(json), function (data) {
+    $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/", JSON.stringify(json), function (data) {
         //console.log("save_policy_success:" + policy_name + ":" + data);
         niceAlert("保存成功",true);
         //history.go(-1);

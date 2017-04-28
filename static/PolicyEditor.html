@@ -110,7 +110,7 @@
             $("#formula").focus(function () {
                 $("#value_radio_3").click();
             });
-            $.getJSON(base_url + "tenants/" + tenant_id + "/policies/" + policy_name, function (data) {
+            $.getJSON(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name, function (data) {
                 $.each(data, function (key, value) {//遍历属性
                     if (key.indexOf(":") < 0) {
                         //if (key.indexOf("context_is_admin") < 0) {

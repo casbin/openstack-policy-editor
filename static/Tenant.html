@@ -20,17 +20,18 @@
     </style>
     <script>
         $(document).ready(function () {
-            $.get(base_url + "tenants/", function (data) {
+            console.log(getBaseUrl());
+            $.get(getBaseUrl()+"/" + "tenants/", function (data) {
                 $("#user-list-group").empty();
                 $.each(data, function(i, field){
-                    $("#user-list-group").append('<li class="list-group-item pointer-as-hand center-text" onclick="jumpToMetadataPage(\'' + field.id + "\',\'" + field.name +'\')">' + field.name + '<div class="glyphicon glyphicon-th-list" title="进入用户列表" style="float: right;margin-right: 0px" onclick="jumpToUserPage(\'' + field.id + '\');event.cancelBubble = true;"></div></li>');
+                    $("#user-list-group").append('<li class="list-group-item pointer-as-hand center-text" style="height: 23%" onclick="jumpToMetadataPage(\'' + field.id + "\',\'" + field.name +'\')">' + field.name + '<img src="./images/users.svg" class="user-list" style="float: right;margin-right: 0vw" onclick="jumpToUserPage(\'' + field.id + '\');event.cancelBubble = true;"><div style="float:right;height: 7vh;margin-top:-1.8vh;width: 0.7px;background: #ddd;margin-right: 13px"></div></li>');
                     //cancelBubble可以拦截往父div的事件分发
                 });
             });
         });
 
         function reset() {
-            $.getJSON(base_url + "reset", function (data) {
+            $.getJSON(getBaseUrl()+"/" + "reset", function (data) {
                 niceAlert("重置成功",true);
                 location.reload(true);
             });
@@ -88,7 +89,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-lg-4 col-lg-offset-4">
+        <div class="col-lg-4 col-lg-offset-4 col-sm-offset-3 col-sm-6">
             <ul class="list-group custom-list-scroll" id="user-list-group">
             </ul>
         </div>
