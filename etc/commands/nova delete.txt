@@ -1,0 +1,1 @@
+Request to delete server vm1 has been accepted.

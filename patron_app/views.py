@@ -131,6 +131,14 @@ def users(request, tenant_id):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
+def get_action(command):
+    word_list = command.split(" ")
+    if len(word_list) < 2:
+        return command
+    else:
+        return word_list[0] + " " + word_list[1]
+
+
 def get_command_output(command):
     output_path = command_dir + "/" + command + ".txt"
     try:
@@ -144,7 +152,11 @@ def commands(request, tenant_id, user_name):
     if request.method != "GET":
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
-    response_data = ["nova list", "nova service-list"]
+    response_data = ["nova list",
+                     "nova service-list",
+                     "nova boot --flavor m1.nano --image cirros --nic net-id=c4eb995e-748d-4684-a956-10d0ad0e73fd --security-group default vm1",
+                     "nova show vm1",
+                     "nova delete vm1"]
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
@@ -175,7 +187,7 @@ def command(request, tenant_id, user_name, command):
             response_data = get_403_error()
             return HttpResponse(response_data, content_type="text/plain")
 
-    response_data = get_command_output(command)
+    response_data = get_command_output(get_action(command))
     if response_data == "":
         response_data = get_404_error()
     return HttpResponse(response_data, content_type="text/plain")

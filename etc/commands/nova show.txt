@@ -1,0 +1,33 @@
++--------------------------------------+----------------------------------------------------------+
+| Property                             | Value                                                    |
++--------------------------------------+----------------------------------------------------------+
+| OS-DCF:diskConfig                    | MANUAL                                                   |
+| OS-EXT-AZ:availability_zone          | nova                                                     |
+| OS-EXT-STS:power_state               | 1                                                        |
+| OS-EXT-STS:task_state                | -                                                        |
+| OS-EXT-STS:vm_state                  | active                                                   |
+| OS-SRV-USG:launched_at               | 2017-05-04T08:37:09.000000                               |
+| OS-SRV-USG:terminated_at             | -                                                        |
+| accessIPv4                           |                                                          |
+| accessIPv6                           |                                                          |
+| config_drive                         |                                                          |
+| created                              | 2017-05-04T08:36:04Z                                     |
+| description                          | -                                                        |
+| flavor                               | m1.nano (0)                                              |
+| hostId                               | b5fd00f91f0b0c10632e9b3204f375964aecb647ca27eda48425a2f0 |
+| id                                   | 1b0d9f27-568d-4718-b5f2-e0df87f9ab7e                     |
+| image                                | cirros (2a4db9b4-c694-4d15-ac26-51b7a75980af)            |
+| key_name                             | -                                                        |
+| locked                               | False                                                    |
+| metadata                             | {}                                                       |
+| name                                 | vm1                                                      |
+| os-extended-volumes:volumes_attached | []                                                       |
+| progress                             | 0                                                        |
+| provider network                     | 192.168.41.108                                           |
+| security_groups                      | default                                                  |
+| status                               | ACTIVE                                                   |
+| tags                                 | []                                                       |
+| tenant_id                            | 8cf4e7b2a4604649b4bf86be9887bd73                         |
+| updated                              | 2017-05-04T08:37:09Z                                     |
+| user_id                              | c3353c6460e24fe095fd048027f10b35                         |
++--------------------------------------+----------------------------------------------------------+
