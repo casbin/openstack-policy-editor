@@ -13,12 +13,17 @@ import time
 
 # patron_dir = "C:/etc/patron"
 patron_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\patron"
+command_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\commands"
 
 admin_tenant_id = "00000000000000000000000000000000"
 
 
 def get_403_error():
     return "ERROR (Forbidden): Policy doesn't allow this operation to be performed. (HTTP 403) (Request-ID: req-%s)" % uuid.uuid4()
+
+
+def get_404_error():
+    return "ERROR (Unsupported): This operation is unsupported. (HTTP 404) (Request-ID: req-%s)" % uuid.uuid4()
 
 
 def tenants(request):
@@ -126,6 +131,15 @@ def users(request, tenant_id):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
+def get_command_output(command):
+    output_path = command_dir + "/" + command + ".txt"
+    try:
+        file_object = open(output_path, 'r')
+    except:
+        return ""
+    return file_object.read()
+
+
 def command(request, tenant_id, user_name, command):
     if request.method != "GET":
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
@@ -153,28 +167,10 @@ def command(request, tenant_id, user_name, command):
             response_data = get_403_error()
             return HttpResponse(response_data, content_type="text/plain")
 
-    if command == "nova list":
-        response_data = \
-'''+--------------------------------------+-------------------+---------+------------+-------------+-------------------------+
-| ID                                   | Name              | Status  | Task State | Power State | Networks                |
-+--------------------------------------+-------------------+---------+------------+-------------+-------------------------+
-| 5b7e5d93-4676-473a-9161-4dc3ac46ce76 | provider-instance | SHUTOFF | -          | Shutdown    | provider=192.168.41.107 |
-+--------------------------------------+-------------------+---------+------------+-------------+-------------------------+'''
-        return HttpResponse(response_data, content_type="text/plain")
-    elif command == "nova service-list":
-        response_data = \
-'''+----+------------------+------------+----------+---------+-------+----------------------------+-----------------+
-| Id | Binary           | Host       | Zone     | Status  | State | Updated_at                 | Disabled Reason |
-+----+------------------+------------+----------+---------+-------+----------------------------+-----------------+
-| 1  | nova-scheduler   | controller | internal | enabled | up    | 2017-03-26T03:31:27.000000 | -               |
-| 2  | nova-consoleauth | controller | internal | enabled | up    | 2017-03-26T03:31:28.000000 | -               |
-| 3  | nova-conductor   | controller | internal | enabled | up    | 2017-03-26T03:31:27.000000 | -               |
-| 6  | nova-compute     | compute1   | nova     | enabled | down  | 2017-03-23T15:24:08.000000 | -               |
-+----+------------------+------------+----------+---------+-------+----------------------------+-----------------+'''
-        return HttpResponse(response_data, content_type="text/plain")
-    else:
-        response_data = get_403_error()
-        return HttpResponse(response_data, content_type="text/plain")
+    response_data = get_command_output(command)
+    if response_data == "":
+        response_data = get_404_error()
+    return HttpResponse(response_data, content_type="text/plain")
 
 
 def reset(request):
