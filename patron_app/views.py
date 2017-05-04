@@ -140,6 +140,14 @@ def get_command_output(command):
     return file_object.read()
 
 
+def commands(request, tenant_id, user_name):
+    if request.method != "GET":
+        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+
+    response_data = ["nova list", "nova service-list"]
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
 def command(request, tenant_id, user_name, command):
     if request.method != "GET":
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
