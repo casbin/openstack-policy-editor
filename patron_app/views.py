@@ -131,12 +131,32 @@ def users(request, tenant_id):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
-def get_action(command):
+def get_short_command(command):
     word_list = command.split(" ")
     if len(word_list) < 2:
         return command
     else:
         return word_list[0] + " " + word_list[1]
+
+
+def get_action(command):
+    m = {"nova list": "compute:get_all",
+         "nova service-list": "compute_extension:services",
+         "nova boot": "compute:create",
+         "nova show": "compute:get",
+         "nova delete": "compute:delete"}
+    if m.has_key(command):
+        return m[command]
+    else:
+        return ""
+
+
+def get_object(command):
+    word_list = command.split(" ")
+    if len(word_list) < 3:
+        return ""
+    else:
+        return word_list[len(word_list) - 1]
 
 
 def get_command_output(command):
@@ -146,6 +166,12 @@ def get_command_output(command):
     except:
         return ""
     return file_object.read()
+
+
+def enforce_command(sub, obj, act):
+    res = True
+    print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+    return res
 
 
 def commands(request, tenant_id, user_name):
@@ -178,16 +204,19 @@ def command(request, tenant_id, user_name, command):
 
     time.sleep(1)
 
+    sub = user_name
+    obj = get_object(command)
+    act = get_action(get_short_command(command))
+    if not enforce_command(sub, obj, act):
+        response_data = get_403_error()
+        return HttpResponse(response_data, content_type="text/plain")
+
     if tenant_id != admin_tenant_id:
         if command == "nova service-list":
             response_data = get_403_error()
             return HttpResponse(response_data, content_type="text/plain")
 
-        if user_name == "user2":
-            response_data = get_403_error()
-            return HttpResponse(response_data, content_type="text/plain")
-
-    response_data = get_command_output(get_action(command))
+    response_data = get_command_output(get_short_command(command))
     if response_data == "":
         response_data = get_404_error()
     return HttpResponse(response_data, content_type="text/plain")
