@@ -168,8 +168,43 @@ def get_command_output(command):
     return file_object.read()
 
 
-def enforce_command(sub, obj, act):
-    res = True
+def enforce_command(tenant_id, sub, obj, act):
+    if tenant_id == admin_tenant_id:
+        res = True
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    if act == "compute_extension:services":
+        res = False
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    if tenant_id == "e6770d762b5a45c994be36d4a8cca7e0":
+        res = False
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    if sub == "admin":
+        res = True
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    policy_path = patron_dir + "/custom_policy/" + tenant_id + "/custom-policy.json"
+    try:
+        file_object = open(policy_path, 'r')
+    except:
+        res = True
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    rule = '"%s": "target_id:%s AND user_id:%s"' % (act, obj, sub)
+    print "rule = " + rule
+    rules = file_object.read()
+    if rule in rules:
+        res = True
+    else:
+        res = False
+
     print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
     return res
 
@@ -207,14 +242,9 @@ def command(request, tenant_id, user_name, command):
     sub = user_name
     obj = get_object(command)
     act = get_action(get_short_command(command))
-    if not enforce_command(sub, obj, act):
+    if not enforce_command(tenant_id, sub, obj, act):
         response_data = get_403_error()
         return HttpResponse(response_data, content_type="text/plain")
-
-    if tenant_id != admin_tenant_id:
-        if command == "nova service-list":
-            response_data = get_403_error()
-            return HttpResponse(response_data, content_type="text/plain")
 
     response_data = get_command_output(get_short_command(command))
     if response_data == "":
