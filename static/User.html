@@ -46,6 +46,7 @@
             }
             return array;
         }
+
         //跳转
         function executeCommand(user_id) {
             $.confirm({
@@ -54,7 +55,7 @@
                 '<form action="" class="formName">' +
                 '<div class="form-group">' +
                 '<label class="control-label">Command</label>' +
-                '<input type="text" id="command_input" class="form-control"" required />' +
+                '<input type="text" id="command_input" class="form-control" required />' +
                 '<br/><label class="control-label">Result</label>' +
                 '<div id="command_result"> </div>' +
                 '</div>' +
@@ -68,6 +69,9 @@
                         btnClass: 'btn-green',
                         action: function () {
                             var input = this.$content.find('#command_input').val();
+                            let context = this;
+                            context.buttons['formSubmit'].setText("请稍候...");
+                            context.buttons['formSubmit'].addClass("disabled");
                             $.get(getBaseUrl()+"/" + "tenants/" + tenant_id + "/users/" + user_id + "/commands/" + input,
                                 function (data, status) {
                                     //把制表符格式的转化为数组
@@ -101,6 +105,8 @@
                                     } else {
                                         $('#command_result').html(data);
                                     }
+                                    context.buttons['formSubmit'].setText("提交");
+                                    context.buttons['formSubmit'].removeClass("disabled");
                                 });
                             return false;
                         }
@@ -120,6 +126,11 @@
                         e.preventDefault();
                         jc.$$formSubmit.trigger('click'); // reference the button and click it
                     });
+                    this.$content.find('#command_input').on('keydown', function (e) {
+                        if(event.keyCode=='13')
+                            jc.$$formSubmit.trigger('click'); // reference the button and click it
+                    });
+
                     //先初始化
                     $("#command_input").autocomplete({
                         source: [[]]

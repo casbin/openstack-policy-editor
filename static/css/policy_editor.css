@@ -37,13 +37,13 @@
 .custom-list-scroll {
     overflow: auto;
     width: auto;
-    max-height: 50vh;
+    max-height: 30vh;
 }
 
 .custom-list-scroll-small {
     overflow: auto;
     width: auto;
-    max-height: 40vh;
+    max-height: 30vh;
 }
 
 .pointer-as-hand {

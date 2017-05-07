@@ -33,12 +33,15 @@ function save_this_policy() {
             value = "";
     }
     else if($('#value_radio_2').is(':checked')){
-        if($("#target_vm_name").val()=="" || $("#target_user_name").val()== ""){
+        if($("#target_user_name").val()== ""){
             niceAlert("请填写完整",false);
             return ;
         }
-        value = "target_id:"+$("#target_vm_name").val()+" AND user_id:"+ $("#target_user_name").val();
-
+        if($("#target_vm_name").val()== ""){
+            value = "user_id:"+ $("#target_user_name").val();
+        }else{
+            value = "target_id:"+$("#target_vm_name").val()+" and user_id:"+ $("#target_user_name").val();
+        }
     }else{
         if($("#formula").val()==""){
             niceAlert("请填写完整",false);
