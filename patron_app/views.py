@@ -13,12 +13,17 @@ import time
 
 # patron_dir = "C:/etc/patron"
 patron_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\patron"
+command_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\commands"
 
 admin_tenant_id = "00000000000000000000000000000000"
 
 
 def get_403_error():
     return "ERROR (Forbidden): Policy doesn't allow this operation to be performed. (HTTP 403) (Request-ID: req-%s)" % uuid.uuid4()
+
+
+def get_404_error():
+    return "ERROR (Unsupported): This operation is unsupported. (HTTP 404) (Request-ID: req-%s)" % uuid.uuid4()
 
 
 def tenants(request):
@@ -126,6 +131,96 @@ def users(request, tenant_id):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
+def get_short_command(command):
+    word_list = command.split(" ")
+    if len(word_list) < 2:
+        return command
+    else:
+        return word_list[0] + " " + word_list[1]
+
+
+def get_action(command):
+    m = {"nova list": "compute:get_all",
+         "nova service-list": "compute_extension:services",
+         "nova boot": "compute:create",
+         "nova show": "compute:get",
+         "nova delete": "compute:delete"}
+    if m.has_key(command):
+        return m[command]
+    else:
+        return ""
+
+
+def get_object(command):
+    word_list = command.split(" ")
+    if len(word_list) < 3:
+        return ""
+    else:
+        return word_list[len(word_list) - 1]
+
+
+def get_command_output(command):
+    output_path = command_dir + "/" + command + ".txt"
+    try:
+        file_object = open(output_path, 'r')
+    except:
+        return ""
+    return file_object.read()
+
+
+def enforce_command(tenant_id, sub, obj, act):
+    if tenant_id == admin_tenant_id:
+        res = True
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    if act == "compute_extension:services":
+        res = False
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    if tenant_id == "e6770d762b5a45c994be36d4a8cca7e0":
+        res = False
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    if sub == "admin":
+        res = True
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    policy_path = patron_dir + "/custom_policy/" + tenant_id + "/custom-policy.json"
+    try:
+        file_object = open(policy_path, 'r')
+    except:
+        res = True
+        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        return res
+
+    rule = '"%s": "target_id:%s AND user_id:%s"' % (act, obj, sub)
+    print "rule = " + rule
+    rules = file_object.read()
+    if rule in rules:
+        res = True
+    else:
+        res = False
+
+    print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+    return res
+
+
+def commands(request, tenant_id, user_name):
+    if request.method != "GET":
+        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+
+    response_data = ["nova list",
+                     "nova service-list",
+                     "nova boot --flavor m1.nano --image cirros --nic net-id=c4eb995e-748d-4684-a956-10d0ad0e73fd --security-group default vm1",
+                     "nova show vm1",
+                     "nova delete vm1"]
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
 def command(request, tenant_id, user_name, command):
     if request.method != "GET":
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
@@ -144,37 +239,17 @@ def command(request, tenant_id, user_name, command):
 
     time.sleep(1)
 
-    if tenant_id != admin_tenant_id:
-        if command == "nova service-list":
-            response_data = get_403_error()
-            return HttpResponse(response_data, content_type="text/plain")
-
-        if user_name == "user2":
-            response_data = get_403_error()
-            return HttpResponse(response_data, content_type="text/plain")
-
-    if command == "nova list":
-        response_data = \
-'''+--------------------------------------+-------------------+---------+------------+-------------+-------------------------+
-| ID                                   | Name              | Status  | Task State | Power State | Networks                |
-+--------------------------------------+-------------------+---------+------------+-------------+-------------------------+
-| 5b7e5d93-4676-473a-9161-4dc3ac46ce76 | provider-instance | SHUTOFF | -          | Shutdown    | provider=192.168.41.107 |
-+--------------------------------------+-------------------+---------+------------+-------------+-------------------------+'''
-        return HttpResponse(response_data, content_type="text/plain")
-    elif command == "nova service-list":
-        response_data = \
-'''+----+------------------+------------+----------+---------+-------+----------------------------+-----------------+
-| Id | Binary           | Host       | Zone     | Status  | State | Updated_at                 | Disabled Reason |
-+----+------------------+------------+----------+---------+-------+----------------------------+-----------------+
-| 1  | nova-scheduler   | controller | internal | enabled | up    | 2017-03-26T03:31:27.000000 | -               |
-| 2  | nova-consoleauth | controller | internal | enabled | up    | 2017-03-26T03:31:28.000000 | -               |
-| 3  | nova-conductor   | controller | internal | enabled | up    | 2017-03-26T03:31:27.000000 | -               |
-| 6  | nova-compute     | compute1   | nova     | enabled | down  | 2017-03-23T15:24:08.000000 | -               |
-+----+------------------+------------+----------+---------+-------+----------------------------+-----------------+'''
-        return HttpResponse(response_data, content_type="text/plain")
-    else:
+    sub = user_name
+    obj = get_object(command)
+    act = get_action(get_short_command(command))
+    if not enforce_command(tenant_id, sub, obj, act):
         response_data = get_403_error()
         return HttpResponse(response_data, content_type="text/plain")
+
+    response_data = get_command_output(get_short_command(command))
+    if response_data == "":
+        response_data = get_404_error()
+    return HttpResponse(response_data, content_type="text/plain")
 
 
 def reset(request):

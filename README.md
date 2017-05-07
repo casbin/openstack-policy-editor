@@ -9,8 +9,9 @@ A RESTful API for Patron UI.
 4. POST ``/tenants/<TENANT_ID>``: Set the ``metadata.json`` for a tenant ``<TENANT_ID>``.
 5. POST ``/tenants/<TENANT_ID>/policies/<POLICY_NAME>``: Set the ``<POLICY_NAME>.json`` for a tenant ``<TENANT_ID>``.
 6. GET ``/tenants/<TENANT_ID>/users``: Get all users for a tenant ``<TENANT_ID>``.
-7. GET ``/tenants/<TENANT_ID>/users/<USER_NAME>/commands/<COMMAND>``: Run command ``<COMMAND>`` as the user ``<USER_NAME>`` of tenant ``<TENANT_ID>``.
-8. GET ``/reset``: Reset all data to the initial state.
+7. GET ``/tenants/<TENANT_ID>/users/<USER_NAME>/commands``: Get all commands that can be run by the user ``<USER_NAME>`` of tenant ``<TENANT_ID>``.
+8. GET ``/tenants/<TENANT_ID>/users/<USER_NAME>/commands/<COMMAND>``: Run command ``<COMMAND>`` as the user ``<USER_NAME>`` of tenant ``<TENANT_ID>``.
+9. GET ``/reset``: Reset all data to the initial state.
 
 ## Examples
 
@@ -19,7 +20,8 @@ A RESTful API for Patron UI.
 3. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/policies/custom-policy
 4. http://osvt.net:3000/tenants/00000000000000000000000000000000/users
 4. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users
-5. http://osvt.net:3000/tenants/00000000000000000000000000000000/users/admin/commands/nova%20service-list
-5. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user1/commands/nova%20service-list
-5. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user1/commands/nova%20list
-5. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user2/commands/nova%20list
+5. http://osvt.net:3000/tenants/00000000000000000000000000000000/users/admin/commands
+6. http://osvt.net:3000/tenants/00000000000000000000000000000000/users/admin/commands/nova%20service-list
+6. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user1/commands/nova%20service-list
+6. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user1/commands/nova%20list
+6. http://osvt.net:3000/tenants/85c8848b1dd64c7ebb2c5baeb12e25c3/users/user2/commands/nova%20list

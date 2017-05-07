@@ -1,0 +1,33 @@
++--------------------------------------+-----------------------------------------------+
+| Property                             | Value                                         |
++--------------------------------------+-----------------------------------------------+
+| OS-DCF:diskConfig                    | MANUAL                                        |
+| OS-EXT-AZ:availability_zone          |                                               |
+| OS-EXT-STS:power_state               | 0                                             |
+| OS-EXT-STS:task_state                | scheduling                                    |
+| OS-EXT-STS:vm_state                  | building                                      |
+| OS-SRV-USG:launched_at               | -                                             |
+| OS-SRV-USG:terminated_at             | -                                             |
+| accessIPv4                           |                                               |
+| accessIPv6                           |                                               |
+| adminPass                            | mJreJaAc3fUG                                  |
+| config_drive                         |                                               |
+| created                              | 2017-05-04T08:36:04Z                          |
+| description                          | -                                             |
+| flavor                               | m1.nano (0)                                   |
+| hostId                               |                                               |
+| id                                   | 1b0d9f27-568d-4718-b5f2-e0df87f9ab7e          |
+| image                                | cirros (2a4db9b4-c694-4d15-ac26-51b7a75980af) |
+| key_name                             | -                                             |
+| locked                               | False                                         |
+| metadata                             | {}                                            |
+| name                                 | vm1                                           |
+| os-extended-volumes:volumes_attached | []                                            |
+| progress                             | 0                                             |
+| security_groups                      | default                                       |
+| status                               | BUILD                                         |
+| tags                                 | []                                            |
+| tenant_id                            | 8cf4e7b2a4604649b4bf86be9887bd73              |
+| updated                              | 2017-05-04T08:36:05Z                          |
+| user_id                              | c3353c6460e24fe095fd048027f10b35              |
++--------------------------------------+-----------------------------------------------+

@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^tenants/(\w+)/$', patron_app.views.metadata),
     url(r'^tenants/(\w+)/policies/(.+)/$', patron_app.views.policy),
     url(r'^tenants/(\w+)/users/$', patron_app.views.users),
+    url(r'^tenants/(\w+)/users/(.+)/commands/$', patron_app.views.commands),
     url(r'^tenants/(\w+)/users/(.+)/commands/(.*)$', patron_app.views.command),
     url(r'^reset/$', patron_app.views.reset),
     url(r'^(.*).html$', patron_app.views.redirect_handler),
