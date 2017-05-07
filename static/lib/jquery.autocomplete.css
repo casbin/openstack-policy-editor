@@ -27,7 +27,7 @@ text-align: start;
 	-webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 	cursor: default;
 	display:none;
-	z-index: 1001;
+	z-index: 999999999;
 	margin-top:-1px;
 	background-color:#fff;
 	min-width:100%;
@@ -55,7 +55,7 @@ text-align: start;
 	right:5px;
 	position:absolute;
 	margin-top:-15px;
-	z-index:1002;
+	z-index:1000000000;
 }
 .xdsoft_autocomplete .xdsoft_autocomplete_dropdown > div{
 	background:#fff;

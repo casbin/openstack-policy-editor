@@ -21,7 +21,7 @@
     </style>
     <script>
         var tenant_id;
-        var command_list = ["nova list", "nova service-list"];
+        //var command_list = ["nova list", "nova service-list"];
         $(document).ready(function () {
             tenant_id = GetQueryString("tenant_id");//从url中获取tenant_id，再拿去get
 
@@ -52,7 +52,7 @@
             $.confirm({
                 title: "执行命令",
                 content: '' +
-                '<form action="" class="formName">' +
+                '<form action="" class="formName" style="height: 30vh">' +
                 '<div class="form-group">' +
                 '<label class="control-label">Command</label>' +
                 '<input type="text" id="command_input" class="form-control" required />' +
@@ -75,7 +75,7 @@
                             $.get(getBaseUrl()+"/" + "tenants/" + tenant_id + "/users/" + user_id + "/commands/" + input,
                                 function (data, status) {
                                     //把制表符格式的转化为数组
-                                    if (!data.startsWith("ERROR")) {
+                                    if (data.startsWith("+")) {
                                         var lines = data.split("\n");
                                         for (var i = 0; i < lines.length; i++) {
                                             if (lines[i].startsWith("+"))
@@ -135,7 +135,11 @@
                     $("#command_input").autocomplete({
                         source: [[]]
                     });
-                    $("#command_input").autocomplete('setSource', command_list, 1);//必须加第三个参数否则会错我也不知为什么
+                    $.getJSON(getBaseUrl()+"/" + "tenants/" + tenant_id + "/users/" + user_id + "/commands", function (data) {
+                        let command_list = data;
+                        $("#command_input").autocomplete('setSource', command_list, 1);//必须加第三个参数否则会错我也不知为什么
+                    });
+
                 }
             });
         }
