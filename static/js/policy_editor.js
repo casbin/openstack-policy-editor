@@ -17,7 +17,6 @@ function afterDeleteListItem(key) {
     //用正则表达式取出Key
     var reg = new RegExp('"(.*)": ".*"');
     var str2 = key.text().replace(reg, "$1").trim();//不知道为啥有个空格
-    console.log(str2);
     key.remove();
     delete current_json[str2];//删除current_json中元素
 };
@@ -92,7 +91,6 @@ function save_this_policy() {
         $("#policy-list-group").prepend('<li class="list-group-item"> <a class="key-color">\"' + key + '\"</a>: <a class="value-color">\"' + value + '\"</a><span><img class="pointer-as-hand delete-btn " src="./images/delete.png"  onclick="afterDeleteListItem($(this).closest(\'.list-group-item\'))"/></span></li>');   //prepend可以添加在开头
         niceAlert("添加成功",true);
     }
-    console.log(name + ":" + action + ":" + value)
 };
 
 //将Rule添加到json中并刷新界面
@@ -169,9 +167,25 @@ function show_sub_rule_menu() {
 //刷新policy列表
 function show_policy_list() {
     $("#policy-list-group").empty();
+    let keyValueArray = [];
     for (key in current_json) {
-        $("#policy-list-group").append('<li class="list-group-item"> <a class="key-color">\"' + key + '\"</a>: <a class="value-color">\"' + current_json[key] + '\"</a><span><img class="pointer-as-hand delete-btn " src="./images/delete.png"  onclick="afterDeleteListItem($(this).closest(\'.list-group-item\'))"/></span></li>');   //styles
+        keyValueArray.push({"key":key,"value":current_json[key]});
     }
+    keyValueArray.sort(function (a,b) {
+        if(a.key+""+a.value > b.key+""+b.value){
+            return 1;
+        }else{
+            return -1;
+        }
+    });
+    keyValueArray.forEach(function (element,i) {
+        $("#policy-list-group").append('<li class="list-group-item"> <a class="key-color">\"' + element.key + '\"</a>: <a class="value-color">\"' + element.value + '\"</a><span><img class="pointer-as-hand delete-btn " src="./images/delete.png"  onclick="afterDeleteListItem($(this).closest(\'.list-group-item\'))"/></span></li>');   //styles
+    })
+
+
+    //排序再输出
+
+    //排序
 }
 
 //刷新rule列表
@@ -199,9 +213,8 @@ function merge_rule_and_policy() {
 //post并后退
 function postPolicyToServer(tenant_id, policy_name) {
     var json = merge_rule_and_policy();
-    alert(JSON.stringify(json));
     //以json格式发送就需要用stringify这个函数
-    $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/", JSON.stringify(json), function (data) {
+    $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/", sortJson(JSON.stringify(json)), function (data) {
         //console.log("save_policy_success:" + policy_name + ":" + data);
         niceAlert("保存成功",true);
         //history.go(-1);
@@ -214,4 +227,11 @@ function GetQueryString(name) {
     var r = window.location.search.substr(1).match(reg);
     if (r != null)return unescape(r[2]);
     return null;
+}
+
+//把json格式化。这里假设字符串中不会出现 逗号
+function sortJson(json){
+    let keyvalueArray = json.substring(1,json.length-1).split(",");
+    keyvalueArray.sort();
+    return "["+keyvalueArray.join(",")+"]";
 }
