@@ -197,7 +197,10 @@ def enforce_command(tenant_id, sub, obj, act):
         print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
         return res
 
-    rule = '"%s": "target_id:%s AND user_id:%s"' % (act, obj, sub)
+    if obj != "":
+        rule = '"%s": "target_id:%s and user_id:%s"' % (act, obj, sub)
+    else:
+        rule = '"%s": "user_id:%s"' % (act, sub)
     print "rule = " + rule
     rules = file_object.read()
     if rule in rules:
