@@ -225,6 +225,8 @@ def commands(request, tenant_id, user_name):
 
 
 def command(request, tenant_id, user_name, command):
+    return HttpResponse("test", content_type="text/plain")
+
     if request.method != "GET":
         return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
