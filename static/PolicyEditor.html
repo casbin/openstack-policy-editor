@@ -30,18 +30,19 @@
         var policy_name;
         var tenant_id;
         let row=0,column=0;
-        const policyjson = [
+        let policyjson = [];
+            /*[
             "p, alice, data1, read",
             "p, bob, data2, write",
             "p, data2_admin, data2, read",
             "p, data2_admin, data2, write",
             "g, alice, data2_admin",
-            "p, alice, /alice_data/*, GET",
+            "p, alice, /alice_data/!*, GET",
             "p, alice, /alice_data/resource1, POST",
             "p, bob, /alice_data/resource2, GET",
-            "p, bob, /bob_data/*, POST",
+            "p, bob, /bob_data/!*, POST",
             "p, cathy, /cathy_data, (GET)|(POST)"
-        ];
+        ];*/
         let policyObj;
         $(document).ready(function () {
             policy_name = GetQueryString("policy_name");//从url中获取policy name
@@ -49,8 +50,9 @@
             tenant_name = GetQueryString("tenant_name");//从url中获取tenant_id，再拿去get
             $("#username").text(tenant_name);
 
-            //$.get(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name, function (data) {
-                data = policyjson;
+            $.getJSON(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name, function (data) {
+                //data = policyjson;
+                policyjson = data;
                 row = policyjson.length;//此时已经按换行符分割成了数组
                 policyObj = [];
                 for(let i=0;i<row;i++){
@@ -59,7 +61,7 @@
                 }
                 showExcel(policyObj);
 
-            //});
+            });
 
         });
 
@@ -151,13 +153,13 @@
                     policyObj.push(tempString.substring(0, tempString.length - 2));
                 });
                 console.log(policyObj);
-                /*
+
                 //以json格式发送就需要用stringify这个函数
-                $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/", sortJson(JSON.stringify(policyObj)), function (data) {
+                $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/",(JSON.stringify(policyObj)), function (data) {
                     //console.log("save_policy_success:" + policy_name + ":" + data);
                     niceAlert("保存成功",true);
                     //history.go(-1);
-                }, "json");*/
+                }, "json");
             }
         }
     </script>
