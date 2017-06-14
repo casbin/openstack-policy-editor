@@ -33,13 +33,17 @@ def tenants(request):
     response_data = []
 
     files = os.listdir(patron_dir + "/custom_policy")
+    files.sort()
     i = 0
-    display_names = ["Admins（云平台管理员）", "企业A", "企业B", "企业C"]
+    display_names = {"admin": "Admins（云平台管理员）",
+                     "tenant1": "企业A",
+                     "tenant2": "企业B",
+                     "tenant3": "企业C"}
     for f in files:
         print f
         tmp_tenant = {}
         tmp_tenant['id'] = f
-        tmp_tenant['name'] = display_names[i]
+        tmp_tenant['name'] = display_names[f]
         response_data.append(tmp_tenant)
         i += 1
 
