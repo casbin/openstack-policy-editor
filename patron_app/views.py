@@ -97,7 +97,14 @@ def policy(request, tenant_id, policy_name):
         print "method = " + request.method + ", file to read = " + policy_path
         file_object = open(policy_path, 'r')
         try:
-            response_data = json.load(file_object)
+            rules = []
+            while 1:
+                line = file_object.readline()
+                rules.append(line)
+                if not line:
+                    break
+
+            response_data = rules
             # metadata_text = file_object.read()
         finally:
             file_object.close()
@@ -108,8 +115,11 @@ def policy(request, tenant_id, policy_name):
         file_object = open(policy_path, 'w')
         try:
             tmp = json.loads(request.body)
-            jstr = json.dumps(tmp, ensure_ascii=False, indent=4)
-            file_object.write(jstr.encode('utf-8'))
+            rules = ""
+            for line in tmp:
+                rules += line + os.linesep
+            rules = rules.rstrip(os.linesep)
+            file_object.write(rules)
         finally:
             file_object.close()
 
