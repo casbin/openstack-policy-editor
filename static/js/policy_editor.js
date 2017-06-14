@@ -6,7 +6,7 @@ function afterFirstSelectorChanged(key) {
         $("#action_menu").append('<li><input type="radio" id="' + element + '"name="action_menu"><label for="' + element + '">' + element + '</label></li>');   //为Select追加一个Option(下拉项)
     })
     $("#action_menu").find("li input").first().click();//选中第一个元素
-};
+}
 
 function afterThirdSelectorClicked(texts) {
     $("#value_menu_btn").html(texts + '<span class="caret"></span>');//下三角还是要有的，通过这个caret实现
@@ -210,16 +210,6 @@ function merge_rule_and_policy() {
     return result;
 }
 
-//post并后退
-function postPolicyToServer(tenant_id, policy_name) {
-    var json = merge_rule_and_policy();
-    //以json格式发送就需要用stringify这个函数
-    $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/", sortJson(JSON.stringify(json)), function (data) {
-        //console.log("save_policy_success:" + policy_name + ":" + data);
-        niceAlert("保存成功",true);
-        //history.go(-1);
-    }, "json");
-}
 
 //从url中获取参数
 function GetQueryString(name) {

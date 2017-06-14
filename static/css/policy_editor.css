@@ -8,6 +8,29 @@
     right: 0;
 }
 
+:root{
+    --btn-height:2.9vh;
+}
+
+.insert-btn{
+    background-image: url(../images/delete.svg) ;
+}
+
+.delete-btn{
+    background-image: url(../images/delete.svg) ;
+}
+
+
+.td-float-btn{
+    width: var(--btn-height);
+    height: var(--btn-height);
+    cursor: pointer;
+    display:inline-block;
+    text-decoration: none !important;
+    background-size: var(--btn-height) var(--btn-height);
+    vertical-align: middle;
+}
+
 .marginLeft {
     margin-left: 2.7vw;
 }
