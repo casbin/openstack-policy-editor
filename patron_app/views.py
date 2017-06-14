@@ -12,8 +12,8 @@ import uuid
 import time
 
 # patron_dir = "C:/etc/patron"
-patron_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\patron"
-command_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\commands"
+patron_dir = os.path.dirname(os.path.abspath(__file__)) + "/../etc/patron"
+command_dir = os.path.dirname(os.path.abspath(__file__)) + "/../etc/commands"
 
 admin_tenant_id = "admin"
 
