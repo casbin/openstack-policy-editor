@@ -1,14 +1,14 @@
 [
     {
-        "id":"85c8848b1dd64c7ebb2c5baeb12e25c3",
+        "id":"tenant1",
         "name":"user_luoyang"
     },
     {
-        "id":"b52703a841604021902133822c9496e1",
+        "id":"tenant2",
         "name":"user_hongbo"
     },
     {
-        "id":"e6770d762b5a45c994be36d4a8cca7e0",
+        "id":"tenant3",
         "name":"user_other"
     }
 ]

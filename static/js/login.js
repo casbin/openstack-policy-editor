@@ -4,22 +4,22 @@
 var userDb = [
     {   "username": "Admins（云平台管理员）",
         "password": "111111",
-        "id": "00000000000000000000000000000000"
+        "id": "admin"
     },
     {
         "username": "企业A",
         "password": "111111",
-        "id": "85c8848b1dd64c7ebb2c5baeb12e25c3"
+        "id": "tenant1"
     },
     {
         "username": "企业B",
         "password": "111111",
-        "id": "b52703a841604021902133822c9496e1"
+        "id": "tenant2"
     },
     {
         "username": "企业C",
         "password": "111111",
-        "id": "e6770d762b5a45c994be36d4a8cca7e0"
+        "id": "tenant3"
     }];
 function login() {
     hideAllAlerts();

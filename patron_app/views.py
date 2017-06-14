@@ -15,7 +15,7 @@ import time
 patron_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\patron"
 command_dir = os.path.dirname(os.path.abspath(__file__)) + "\\..\\etc\\commands"
 
-admin_tenant_id = "00000000000000000000000000000000"
+admin_tenant_id = "admin"
 
 
 def get_403_error():
@@ -179,7 +179,7 @@ def enforce_command(tenant_id, sub, obj, act):
         print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
         return res
 
-    if tenant_id == "e6770d762b5a45c994be36d4a8cca7e0":
+    if tenant_id == "tenant3":
         res = False
         print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
         return res
