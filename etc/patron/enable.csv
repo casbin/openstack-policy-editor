@@ -1,11 +1,11 @@
-p, tenant1, admin1, /metadata, *, patron
-p, tenant1, admin1, /policy, *, patron
+p, tenant1, admin1, /metadata, *, patron, allow
+p, tenant1, admin1, /policy, *, patron, allow
 
-p, tenant2, admin2, /metadata, *, patron
-p, tenant2, admin2, /policy, *, patron
+p, tenant2, admin2, /metadata, *, patron, allow
+p, tenant2, admin2, /policy, *, patron, allow
 
-p, tenant3, admin3, /metadata, *, patron
-p, tenant3, admin3, /policy, *, patron
+p, tenant3, admin3, /metadata, *, patron, allow
+p, tenant3, admin3, /policy, *, patron, allow
 
 g, user11, admin1
 g, user2, tenant2
