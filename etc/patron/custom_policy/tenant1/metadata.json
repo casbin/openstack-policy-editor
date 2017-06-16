@@ -15,7 +15,7 @@
 			"type": "default",
 			"built-in": "true",
 			"version": "v1.0",
-			"content": "policy.json"
+			"content": "restrict.csv"
 		},
 		"or-policy": {
 			"name": "or-policy",
@@ -32,7 +32,7 @@
 				"type": "default",
 				"built-in": "true",
 				"version": "v1.0",
-				"content": "enable.json"
+				"content": "enable.csv"
 			},
 			"custom-policy": {
 				"name": "custom-policy",
@@ -40,7 +40,7 @@
 				"description": "该租户自定义的策略。",
 				"type": "default",
 				"version": "v1.0",
-				"content": "custom-policy.json"
+				"content": "custom-policy.csv"
 			}
 		}
 	}

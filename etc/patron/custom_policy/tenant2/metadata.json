@@ -19,7 +19,7 @@
             "enable-policy": {
                 "name": "enable-policy", 
                 "built-in": "true", 
-                "content": "enable.json", 
+                "content": "enable.csv",
                 "version": "v1.0", 
                 "display-name": "内置策略-授予租户必要的权限", 
                 "type": "default", 
@@ -33,7 +33,7 @@
         "restrict-policy": {
             "name": "restrict-policy", 
             "built-in": "true", 
-            "content": "policy.json", 
+            "content": "restrict.csv",
             "version": "v1.0", 
             "display-name": "内置策略-限制非法访问", 
             "type": "default", 
