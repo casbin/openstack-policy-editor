@@ -8,5 +8,5 @@ p, tenant3, admin3, /metadata, *, patron, allow
 p, tenant3, admin3, /policy, *, patron, allow
 
 g, user11, admin1
-g, user2, tenant2
-g, user3, tenant3
+g, user2, admin2
+g, user3, admin3
