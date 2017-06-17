@@ -1,4 +1,4 @@
-p, admin, *, /admin/*, *, (nova)|(cinder), deny
-p, tenant1, *, /tenant1/*, *, (nova)|(cinder), deny
-p, tenant2, *, /tenant2/*, *, (nova)|(cinder), deny
-p, tenant3, *, /tenant3/*, *, (nova)|(cinder), deny
+p, admin, *, /admin/*, *, (nova)|(cinder)|(patron), deny
+p, tenant1, *, /tenant1/*, *, (nova)|(cinder)|(patron), deny
+p, tenant2, *, /tenant2/*, *, (nova)|(cinder)|(patron), deny
+p, tenant3, *, /tenant3/*, *, (nova)|(cinder)|(patron), deny
