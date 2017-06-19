@@ -15,7 +15,7 @@
 			"type": "default",
 			"built-in": "true",
 			"version": "v1.0",
-			"content": "policy.json"
+			"content": "restrict.csv"
 		},
 		"enable-policy": {
 			"name": "enable-policy",
@@ -24,7 +24,7 @@
 			"type": "default",
 			"built-in": "true",
 			"version": "v1.0",
-			"content": "enable.json"
+			"content": "enable.csv"
 		}
 	}
 }
