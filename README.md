@@ -5,7 +5,7 @@ A RESTful API for Patron UI.
 
 1. GET ``/tenants``: Get all tenants, each tenant has an ID and a name.
 2. GET ``/tenants/<TENANT_NAME>``: Get the ``metadata.json`` for a tenant ``<TENANT_NAME>``.
-3. GET ``/tenants/<TENANT_NAME>/policies/<POLICY_NAME>``: Get the ``<POLICY_NAME>.json`` for a tenant ``<TENANT_NAME>``.
+3. GET ``/tenants/<TENANT_NAME>/policies/<POLICY_NAME>``: Get the ``xxx.csv`` policy for a tenant ``<TENANT_NAME>``.
 4. POST ``/tenants/<TENANT_NAME>``: Set the ``metadata.json`` for a tenant ``<TENANT_NAME>``.
 5. POST ``/tenants/<TENANT_NAME>/policies/<POLICY_NAME>``: Set the ``<POLICY_NAME>.json`` for a tenant ``<TENANT_NAME>``.
 6. GET ``/tenants/<TENANT_NAME>/users``: Get all users for a tenant ``<TENANT_NAME>``.
@@ -17,7 +17,7 @@ A RESTful API for Patron UI.
 
 1. http://osvt.net:3000/tenants
 2. http://osvt.net:3000/tenants/tenant1
-3. http://osvt.net:3000/tenants/tenant1/policies/custom-policy
+3. http://osvt.net:3000/tenants/tenant1/policies/custom-policy.csv
 4. http://osvt.net:3000/tenants/admin/users
 4. http://osvt.net:3000/tenants/tenant1/users
 5. http://osvt.net:3000/tenants/admin/users/admin/commands
