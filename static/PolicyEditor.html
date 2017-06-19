@@ -65,13 +65,12 @@
 
         });
 
-        function getExtraColumnHead(){
-            console.log(column);
-            if(column>4) {
+        function getExtraColumnHead(const_column_length){
+            if(column>const_column_length) {
                 let count = 1;
                 let head = "";
-                for (var i = column - 5; i >= 0; i--) {
-                    head = head + "<th style='text-align: center'>"+ "自定义列" + count++ +"<a onclick='"+deleteColumn($(this))+"'>(删除列)</a></th>";
+                for (let i = column - (const_column_length+1); i >= 0; i--) {
+                    head = head + "<th style='text-align: center'>"+ "自定义列" + count++ +"<a class='pointer-as-hand' onclick='deleteColumn($(this))'>(删除列)</a></th>";
                 }
                 return head;
             }else{
@@ -80,13 +79,15 @@
         }
 
         function deleteColumn($btnObj){
-            //$btnObj
-            $("#excelbody td").find("td:eq(2)").remove();
+            let index = $btnObj.parent().parent().children().index($btnObj.parent());
+            column--;
+            $("#excelbody tr :nth-child("+(index+1)+")").remove();
         }
 
         function showExcel(policyarrays) {
             $("#excel").empty();
-            let list_html_head = '<table class="table table-bordered table-condensed table-striped" id="excelbody"><thead><th style="text-align: center">规则类型</th><th style="text-align: center">租户</th><th style="text-align: center">用户</th><th style="text-align: center">资源路径</th><th style="text-align: center">操作</th><th style="text-align: center">服务</th>'+getExtraColumnHead()+'<th style="text-align: center;width:8em"><span>授权</span><a class="pointer-as-hand" onclick="insertColumn()">(插入列)</a></th></thead><tbody id="excelbody">';
+            let const_head = '<table class="table table-bordered table-condensed table-striped" id="excelbody"><thead><th style="text-align: center">规则类型</th><th style="text-align: center">租户</th><th style="text-align: center">用户</th><th style="text-align: center">资源路径</th><th style="text-align: center">操作</th><th style="text-align: center">服务</th><th style="text-align: center">授权</th>';
+            let list_html_head = const_head + getExtraColumnHead((const_head.match(/<th /g)).length)+'<th style="text-align: center;width:8em"><span>选项</span><a class="pointer-as-hand" onclick="insertColumn()">(插入列)</a></th></thead><tbody id="excelbody">';
             let list_html_body = "";
             let list_html_foot = '</tbody></table>';
             policyarrays.forEach(function (element, index) {
@@ -104,9 +105,9 @@
             var html = "<tr>";
             for(var i=0;i<column;i++){
                 if(i<array.length){
-                    html = html + '<td align="center"><input oninput="onInputRed($(this))" value="' + array[i] + '"></td>';
+                    html = html + '<td align="center"><input style="width:9vw" oninput="onInputRed($(this))" value="' + array[i] + '"></td>';
                 }else{
-                    html = html + '<td align="center"><input oninput="onInputRed($(this))" value=""></td>';//不够就补上空的输入框
+                    html = html + '<td align="center"><input style="width:9vw" oninput="onInputRed($(this))" value=""></td>';//不够就补上空的输入框
                 }
             }
             html = html + '<td align="center"><a class="pointer-as-hand" onclick="insertRow($(this))">插入行</a>&nbsp;<a class="pointer-as-hand" onclick="deleteCurrentRow($(this))">删除行</a></td>';//添加删除行
@@ -153,14 +154,15 @@
                     $(this).children("td").each(function () {
                         if ($(this).find("input").val() != "") {//跳过空的和操作行
                             tempString = tempString + $(this).find("input").val() + ", ";
+                            console.log(tempString);
                         }
                     });
                     policyObj.push(tempString.substring(0, tempString.length - 2));
                 });
                 console.log(policyObj);
-
+                console.log(JSON.stringify(policyObj));
                 //以json格式发送就需要用stringify这个函数
-                $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/",(JSON.stringify(policyObj)), function (data) {
+                $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/",JSON.stringify(policyObj), function (data) {
                     //console.log("save_policy_success:" + policy_name + ":" + data);
                     niceAlert("保存成功",true);
                     //history.go(-1);

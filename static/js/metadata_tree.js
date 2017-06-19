@@ -46,7 +46,7 @@ function formatZTreeToOriginTree(zTreeNodes) {
 
 //判断tenant_id是否全部为0
 function isAdmin(){
-    return /^0+$/ig.test(tenant_id);
+    return tenant_id == "admin";///^0+$/ig.test(tenant_id);
 }
 
 //递归删除多余属性，把children数组变成一个个属性.同时检查是否有单子节点的children数组.
