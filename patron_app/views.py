@@ -85,10 +85,10 @@ def policy(request, tenant_id, policy_name):
     if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
         return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
-    if os.path.exists(patron_dir + "/custom_policy/" + tenant_id + "/" + policy_name + ".csv"):
-        policy_path = patron_dir + "/custom_policy/" + tenant_id + "/" + policy_name + ".csv"
-    elif os.path.exists(patron_dir + "/" + policy_name + ".csv"):
-        policy_path = patron_dir + "/" + policy_name + ".csv"
+    if os.path.exists(patron_dir + "/custom_policy/" + tenant_id + "/" + policy_name):
+        policy_path = patron_dir + "/custom_policy/" + tenant_id + "/" + policy_name
+    elif os.path.exists(patron_dir + "/" + policy_name):
+        policy_path = patron_dir + "/" + policy_name
     else:
         return HttpResponse("The policy doesn't exist, tenant = " + tenant_id + ", policy = " + policy_name,
                             content_type="text/html")
