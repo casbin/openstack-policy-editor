@@ -86,7 +86,7 @@
 
         function showExcel(policyarrays) {
             $("#excel").empty();
-            let list_html_head = '<table class="table table-bordered table-condensed table-striped" id="excelbody"><thead><th style="text-align: center">规则类型</th><th style="text-align: center">主体</th><th style="text-align: center">客体</th><th style="text-align: center">动作</th>'+getExtraColumnHead()+'<th style="text-align: center;width:8em"><span>操作</span><a class="pointer-as-hand" onclick="insertColumn()">(插入列)</a></th></thead><tbody id="excelbody">';
+            let list_html_head = '<table class="table table-bordered table-condensed table-striped" id="excelbody"><thead><th style="text-align: center">规则类型</th><th style="text-align: center">租户</th><th style="text-align: center">用户</th><th style="text-align: center">资源路径</th><th style="text-align: center">操作</th><th style="text-align: center">服务</th>'+getExtraColumnHead()+'<th style="text-align: center;width:8em"><span>授权</span><a class="pointer-as-hand" onclick="insertColumn()">(插入列)</a></th></thead><tbody id="excelbody">';
             let list_html_body = "";
             let list_html_foot = '</tbody></table>';
             policyarrays.forEach(function (element, index) {
