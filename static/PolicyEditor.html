@@ -56,6 +56,7 @@
                 row = policyjson.length;//此时已经按换行符分割成了数组
                 policyObj = [];
                 for(let i=0;i<row;i++){
+                    if(policyjson[i]=="") continue;//跳过空行
                     policyObj[i] = (policyjson[i]+"").split(", ");
                     column = Math.max(column,policyObj[i].length);
                 }
@@ -81,12 +82,12 @@
         function deleteColumn($btnObj){
             let index = $btnObj.parent().parent().children().index($btnObj.parent());
             column--;
-            $("#excelbody tr :nth-child("+(index+1)+")").remove();
+            $("#exceltable tr :nth-child("+(index+1)+")").remove();
         }
 
         function showExcel(policyarrays) {
             $("#excel").empty();
-            let const_head = '<table class="table table-bordered table-condensed table-striped" id="excelbody"><thead><th style="text-align: center">规则类型</th><th style="text-align: center">租户</th><th style="text-align: center">用户</th><th style="text-align: center">资源路径</th><th style="text-align: center">操作</th><th style="text-align: center">服务</th><th style="text-align: center">授权</th>';
+            let const_head = '<table class="table table-bordered table-condensed table-striped" id="exceltable"><thead><th style="text-align: center">规则类型</th><th style="text-align: center">租户</th><th style="text-align: center">用户</th><th style="text-align: center">资源路径</th><th style="text-align: center">操作</th><th style="text-align: center">服务</th><th style="text-align: center">授权</th>';
             let list_html_head = const_head + getExtraColumnHead((const_head.match(/<th /g)).length)+'<th style="text-align: center;width:8em"><span>选项</span><a class="pointer-as-hand" onclick="insertColumn()">(插入列)</a></th></thead><tbody id="excelbody">';
             let list_html_body = "";
             let list_html_foot = '</tbody></table>';
@@ -137,6 +138,7 @@
             $("#excelbody").children("tr").each(function () {
                 $(this).children("td").each(function (index,element) {
                     let input = $(this).find("input").first();
+
                     if(input.length>0){
                         if(input.val()=="" && index<=2){//前三个必须非空
                             input.css("border-color","red");
@@ -152,15 +154,12 @@
                 $("#excelbody").children("tr").each(function () {
                     let tempString = "";
                     $(this).children("td").each(function () {
-                        if ($(this).find("input").val() != "") {//跳过空的和操作行
+                        if ($(this).find("input").length!=0 && $(this).find("input").val() != "") {//跳过空的和操作行
                             tempString = tempString + $(this).find("input").val() + ", ";
-                            console.log(tempString);
                         }
                     });
                     policyObj.push(tempString.substring(0, tempString.length - 2));
                 });
-                console.log(policyObj);
-                console.log(JSON.stringify(policyObj));
                 //以json格式发送就需要用stringify这个函数
                 $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/",JSON.stringify(policyObj), function (data) {
                     //console.log("save_policy_success:" + policy_name + ":" + data);

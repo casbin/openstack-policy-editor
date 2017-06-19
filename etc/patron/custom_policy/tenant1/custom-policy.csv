@@ -1,5 +1,4 @@
-p, tenant1, admin1, /*, *, *, allow
-p, tenant1, user12, /*, *, nova, allow
-p, tenant1, user13, /*, *, glance, allow
-
+p, tenant1, admin1, /*, *, *, allow
+p, tenant1, user12, /*, *, nova, allow
+p, tenant1, user13, /*, *, glance, allow
 g, user11, admin1
