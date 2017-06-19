@@ -100,9 +100,9 @@ def policy(request, tenant_id, policy_name):
             rules = []
             while 1:
                 line = file_object.readline()
-                rules.append(line)
                 if not line:
                     break
+                rules.append(line.rstrip("\n"))
 
             response_data = rules
             # metadata_text = file_object.read()
