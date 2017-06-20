@@ -117,8 +117,8 @@ def policy(request, tenant_id, policy_name):
             tmp = json.loads(request.body)
             rules = ""
             for line in tmp:
-                rules += line + os.linesep
-            rules = rules.rstrip(os.linesep)
+                rules += line + "\n"
+            rules = rules.rstrip("\n")
             file_object.write(rules)
         finally:
             file_object.close()
