@@ -10,6 +10,8 @@
     <script type="text/javascript" src="lib/jquery-confirm.min.js"></script>
     <script src="lib/bootstrap.min.js"></script>
     <script src="lib/dropdowns-enhancement.js"></script>
+    <script src="lib/editable-select.js"></script>
+    <link rel="stylesheet" href="lib/editable-select.css">
     <link rel="stylesheet" href="lib/dropdowns-enhancement.css">
     <link rel="stylesheet" href="css/policy_editor.css">
     <script src="js/patron_parameters.js"></script>
@@ -17,6 +19,7 @@
     <style>
     </style>
     <script>
+        //https://github.com/indrimuska/jquery-editable-select
         /*
          1.从JS读取二维数组，第一层是name,第二层是action，同时要保证更改第一个下拉菜单的时候第二个跟着变。用了第三方的库dropdown-enhancement
          2.Value的话，前三个固定，第四部分需要从policy.json中除去带冒号的，剩下的key显示出来，内容显示在鼠标指上去的提示中。
