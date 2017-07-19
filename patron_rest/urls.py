@@ -21,6 +21,7 @@ import patron_app.views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^tenants/$', patron_app.views.tenants),
+    url(r'^models/(.+)/$', patron_app.views.models),
     url(r'^tenants/(\w+)/$', patron_app.views.metadata),
     url(r'^tenants/(\w+)/policies/(.+)/$', patron_app.views.policy),
     url(r'^tenants/(\w+)/users/$', patron_app.views.users),
