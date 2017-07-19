@@ -50,6 +50,33 @@ def tenants(request):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
+def models(request, model_name):
+    if not os.path.exists(patron_dir + "/model/" + model_name):
+        return HttpResponse("The model doesn't exist, model = " + model_name, content_type="text/html")
+    model_path = patron_dir + "/model/" + model_name
+
+    if request.method == 'GET':
+        print "method = " + request.method + ", file to read = " + model_path
+        file_object = open(model_path, 'r')
+        try:
+            rules = []
+            while 1:
+                line = file_object.readline()
+                if not line:
+                    break
+                rules.append(line.rstrip("\n").rstrip("\r"))
+
+            response_data = rules
+            # metadata_text = file_object.read()
+        finally:
+            file_object.close()
+
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+    else:
+        print "Unsupported method = " + request.method
+        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+
+
 def metadata(request, tenant_id):
     if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
         return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
