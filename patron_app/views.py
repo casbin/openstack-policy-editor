@@ -26,9 +26,18 @@ def get_404_error():
     return "ERROR (Unsupported): This operation is unsupported. (HTTP 404) (Request-ID: req-%s)" % uuid.uuid4()
 
 
+def MyHttpResponse(*args, **kwargs):
+    response = HttpResponse(*args, **kwargs)
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    response["Access-Control-Max-Age"] = "1000"
+    response["Access-Control-Allow-Headers"] = "*"
+    return response
+
+
 def tenants(request):
     if request.method != "GET":
-        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+        return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
     response_data = []
 
@@ -47,12 +56,12 @@ def tenants(request):
         response_data.append(tmp_tenant)
         i += 1
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return MyHttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 def models(request, model_name):
     if not os.path.exists(patron_dir + "/model/" + model_name):
-        return HttpResponse("The model doesn't exist, model = " + model_name, content_type="text/html")
+        return MyHttpResponse("The model doesn't exist, model = " + model_name, content_type="text/html")
     model_path = patron_dir + "/model/" + model_name
 
     if request.method == 'GET':
@@ -71,15 +80,15 @@ def models(request, model_name):
         finally:
             file_object.close()
 
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return MyHttpResponse(json.dumps(response_data), content_type="application/json")
     else:
         print "Unsupported method = " + request.method
-        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+        return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
 
 def metadata(request, tenant_id):
     if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
-        return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
+        return MyHttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
     metadata_path = patron_dir + "/custom_policy/" + tenant_id + "/metadata.json"
 
     if request.method == 'GET':
@@ -91,7 +100,7 @@ def metadata(request, tenant_id):
         finally:
             file_object.close()
 
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return MyHttpResponse(json.dumps(response_data), content_type="application/json")
     elif request.method == 'POST':
         print "method = " + request.method + ", file to write = " + metadata_path
         file_object = open(metadata_path, 'w')
@@ -102,22 +111,22 @@ def metadata(request, tenant_id):
         finally:
             file_object.close()
 
-            return HttpResponse("{\"status\":\"success\"}", content_type="text/html")
+            return MyHttpResponse("{\"status\":\"success\"}", content_type="text/html")
     else:
         print "Unsupported method = " + request.method
-        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+        return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
 
 def policy(request, tenant_id, policy_name):
     if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
-        return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
+        return MyHttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
     if os.path.exists(patron_dir + "/custom_policy/" + tenant_id + "/" + policy_name):
         policy_path = patron_dir + "/custom_policy/" + tenant_id + "/" + policy_name
     elif os.path.exists(patron_dir + "/" + policy_name):
         policy_path = patron_dir + "/" + policy_name
     else:
-        return HttpResponse("The policy doesn't exist, tenant = " + tenant_id + ", policy = " + policy_name,
+        return MyHttpResponse("The policy doesn't exist, tenant = " + tenant_id + ", policy = " + policy_name,
                             content_type="text/html")
 
     if request.method == 'GET':
@@ -136,7 +145,7 @@ def policy(request, tenant_id, policy_name):
         finally:
             file_object.close()
 
-        return HttpResponse(json.dumps(response_data), content_type="application/json")
+        return MyHttpResponse(json.dumps(response_data), content_type="application/json")
     elif request.method == 'POST':
         print "method = " + request.method + ", file to write = " + policy_path
         file_object = open(policy_path, 'w')
@@ -150,18 +159,18 @@ def policy(request, tenant_id, policy_name):
         finally:
             file_object.close()
 
-            return HttpResponse("{\"status\":\"success\"}", content_type="text/html")
+            return MyHttpResponse("{\"status\":\"success\"}", content_type="text/html")
     else:
         print "Unsupported method = " + request.method
-        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+        return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
 
 def users(request, tenant_id):
     if request.method != "GET":
-        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+        return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
     if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
-        return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
+        return MyHttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
     userlist_path = patron_dir + "/custom_policy/" + tenant_id + "/" + "users.txt"
     print "method = " + request.method + ", file to read = " + userlist_path
@@ -169,7 +178,7 @@ def users(request, tenant_id):
     user_list = file_object.read().split(",")
     response_data = user_list
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return MyHttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 def get_short_command(command):
@@ -255,31 +264,31 @@ def enforce_command(tenant_id, sub, obj, act):
 
 def commands(request, tenant_id, user_name):
     if request.method != "GET":
-        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+        return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
     response_data = ["nova list",
                      "nova service-list",
                      "nova boot --flavor m1.nano --image cirros --nic net-id=c4eb995e-748d-4684-a956-10d0ad0e73fd --security-group default vm1",
                      "nova show vm1",
                      "nova delete vm1"]
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return MyHttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 def command(request, tenant_id, user_name, command):
-    return HttpResponse("test", content_type="text/plain")
+    return MyHttpResponse("test", content_type="text/plain")
 
     if request.method != "GET":
-        return HttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
+        return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
     if not os.path.exists(patron_dir + "/custom_policy/" + tenant_id):
-        return HttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
+        return MyHttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
     userlist_path = patron_dir + "/custom_policy/" + tenant_id + "/" + "users.txt"
     print "method = " + request.method + ", file to read = " + userlist_path
     file_object = open(userlist_path, 'r')
     user_list = file_object.read().split(",")
     if user_name not in user_list:
-        return HttpResponse("The user doesn't exist, tenant = " + tenant_id + ", user = " + user_name, content_type="text/html")
+        return MyHttpResponse("The user doesn't exist, tenant = " + tenant_id + ", user = " + user_name, content_type="text/html")
 
     print "method = " + request.method + ", tenant = " + tenant_id + ", user = " + user_name + ", command to run = " + command
 
@@ -290,12 +299,12 @@ def command(request, tenant_id, user_name, command):
     act = get_action(get_short_command(command))
     if not enforce_command(tenant_id, sub, obj, act):
         response_data = get_403_error()
-        return HttpResponse(response_data, content_type="text/plain")
+        return MyHttpResponse(response_data, content_type="text/plain")
 
     response_data = get_command_output(get_short_command(command))
     if response_data == "":
         response_data = get_404_error()
-    return HttpResponse(response_data, content_type="text/plain")
+    return MyHttpResponse(response_data, content_type="text/plain")
 
 
 def reset(request):
@@ -306,7 +315,7 @@ def reset(request):
     shutil.copytree(patron_copy_dir, patron_dir)
     print "copied from " + patron_copy_dir + " to " + patron_dir
 
-    return HttpResponse("{\"status\":\"success\"}", content_type="application/json")
+    return MyHttpResponse("{\"status\":\"success\"}", content_type="application/json")
 
 
 def redirect_handler(request, url_path):
