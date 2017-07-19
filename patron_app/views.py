@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
 # Create your views here.
 
@@ -310,7 +310,8 @@ def reset(request):
 
 
 def redirect_handler(request, url_path):
-    return HttpResponseRedirect('static/' + url_path + '.html')
+    return render(request, url_path + '.html')
+
 
 def mainpage_handler(request):
-    return HttpResponseRedirect('static/Portal.html')
+    return render(request, 'Portal.html')
