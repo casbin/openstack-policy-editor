@@ -12,9 +12,9 @@ function originTree2FormatTree(realRootNode) {
     realRootNode.name = realRootNode["display-name"];
     //修改图标
     if(realRootNode["type"]=="op-and"){
-        realRootNode.icon = "images/and.png";
+        realRootNode.icon = "../static/images/and.png";
     }else if(realRootNode["type"]=="op-or"){
-        realRootNode.icon = "images/or.png";
+        realRootNode.icon = "../static/images/or.png";
     }
     delete realRootNode["display-name"];
     if (realRootNode["type"] == "op-and" || realRootNode["type"] == "op-or") {
