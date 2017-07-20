@@ -10,6 +10,9 @@
     <script src="lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="lib/jquery-confirm.css"/>
     <script type="text/javascript" src="lib/jquery-confirm.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/highlight.css"/>
+    <script type="text/javascript" src="lib/highlight.js"></script>
+    <link class="codestyle" rel="stylesheet" href="lib/highlight_style/solarized-light.css">
     <script type="text/javascript" src="js/metadata_tree.js"></script>
     <script src="js/patron_parameters.js"></script>
 
@@ -220,7 +223,7 @@
                 $("#modeleditor_save").attr("disabled", "disabled");
             }
             $('#myModal').modal();//最后打开模态对话框
-
+            afterMyModelShown();
         }
 
         //显示加号、编辑图标以及事件
@@ -305,9 +308,50 @@
         function showRemoveBtn(treeId, treeNode) {
             return !treeNode.isFirstNode;
         }
+
         function viewFile() {
-            $('#textarea_json').val(JSON.stringify(formatZTreeToOriginTree($.extend(true, {}, zTreeObj.getNodes()[0])), null, 4));//深复制));
+            /*$('#textarea_json').val(JSON.stringify(formatZTreeToOriginTree($.extend(true, {}, zTreeObj.getNodes()[0])), null, 4));//深复制));*/
+            let json = JSON.stringify(formatZTreeToOriginTree($.extend(true, {}, zTreeObj.getNodes()[0])),null,'\t');//深复制));
+            hljs.configure({
+                tabReplace: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                useBR:true
+            });
+            $('#textarea_file').html(hljs.fixMarkup(hljs.highlightAuto(json).value));
             $('#fileView').modal();//最后打开模态对话框
+        }
+
+        function viewModel(iniName){
+            $.getJSON(getBaseUrl()+"/" + "models/"+iniName, function (data) {
+                let ini = data.join("\n");
+                console.log(ini);
+                hljs.configure({
+                    tabReplace: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                    useBR:true
+                });
+                $('#textarea_file').html(hljs.fixMarkup(hljs.highlightAuto(ini).value));
+                $('#fileView').modal();//最后打开模态对话框
+            });
+        }
+
+        //根据“内容”框，来初始化“查看Model”按钮
+        function afterMyModelShown(){
+            switch($("#modeleditor_content").val()){
+                case "enable.csv":
+                    $("#view_model_btn").removeClass("hidden");
+                    $("#view_model_btn").attr('onclick',"viewModel('enable_model.conf')");
+                    break;
+                case "restrict.csv":
+                    $("#view_model_btn").removeClass("hidden");
+                    $("#view_model_btn").attr('onclick',"viewModel('restrict_model.conf')");
+                    break;
+                case "custom-policy.csv":
+                    $("#view_model_btn").removeClass("hidden");
+                    $("#view_model_btn").attr('onclick',"viewModel('custom_model.conf')");
+                    break;
+                case "":
+                    $("#view_model_btn").addClass("hidden");
+                    break;
+            }
         }
 
     </script>
@@ -395,6 +439,9 @@
                                 <button type="button" id="goto_policy_editor_btn" class="btn btn-primary"
                                         onclick="jumpToPolicyEditor(tenant_id,tenant_name)" aria-hidden="true">编辑此策略
                                 </button>
+                                <button type="button" id="view_model_btn" class="btn btn-primary"
+                                        onclick="viewModel('enable_model.conf')" aria-hidden="true">查看Model
+                                </button>
                             </div>
                         </div>
 
@@ -421,8 +468,8 @@
                 <div class="modal-body">
                     <form class="form-horizontal" role="form">
                         <div class="form-group" style="padding-left: 1vw;padding-right: 1vw">
-                            <textarea class="form-control" id="textarea_json" rows="15"
-                                      onfocus="this.blur()"></textarea>
+                            <div class="textarea hljs" id="textarea_file"
+                                      onfocus="this.blur()"></div>
                         </div>
                     </form>
                 </div>
