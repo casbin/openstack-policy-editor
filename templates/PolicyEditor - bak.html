@@ -75,7 +75,7 @@
                 let count = 1;
                 let head = "";
                 for (let i = column - (const_column_length+1); i >= 0; i--) {
-                    head = head + "<th style='text-align: center'>"+ "Custom Column" + count++ +"<img class='pointer-as-hand' style='width: 3vh;height: 3vh' src='./static/images/col_del.svg' onclick='insertColumn()'></th>";
+                    head = head + "<th style='text-align: center'>"+ "自定义列" + count++ +"<a class='pointer-as-hand' onclick='deleteColumn($(this))'>(删除列)</a></th>";
                 }
                 return head;
             }else{
@@ -91,8 +91,8 @@
 
         function showExcel(policyarrays) {
             $("#excel").empty();
-            let const_head = '<table class="table table-bordered table-condensed table-striped" id="exceltable"><thead><th style="text-align: center">Rule Type</th><th style="text-align: center">Tenant</th><th style="text-align: center">User</th><th style="text-align: center">Resource Path</th><th style="text-align: center">Action</th><th style="text-align: center">Service</th><th style="text-align: center">Auth Effect</th>';
-            let list_html_head = const_head + getExtraColumnHead((const_head.match(/<th /g)).length)+'<th style="text-align: center;width:8em"><span>Option&nbsp;</span><img class="pointer-as-hand" style="width: 3vh;height: 3vh" src="./static/images/col_add.svg" onclick="insertColumn()"></th></thead><tbody id="excelbody">';
+            let const_head = '<table class="table table-bordered table-condensed table-striped" id="exceltable"><thead><th style="text-align: center">规则类型</th><th style="text-align: center">租户</th><th style="text-align: center">用户</th><th style="text-align: center">资源路径</th><th style="text-align: center">操作</th><th style="text-align: center">服务</th><th style="text-align: center">授权</th>';
+            let list_html_head = const_head + getExtraColumnHead((const_head.match(/<th /g)).length)+'<th style="text-align: center;width:8em"><span>选项</span><a class="pointer-as-hand" onclick="insertColumn()">(插入列)</a></th></thead><tbody id="excelbody">';
             let list_html_body = "";
             let list_html_foot = '</tbody></table>';
             policyarrays.forEach(function (element, index) {
@@ -110,26 +110,12 @@
             var html = "<tr>";
             for(var i=0;i<column;i++){
                 if(i<array.length){
-                    if(i==0) {//要用选择框
-                        if(array[i]=='p') {
-                            html = html + '<td align="center"><select style="width:9vw" oninput="onInputRed($(this))"> <option selected>p</option><option>g</option></td>';
-                        }else {
-                            html = html + '<td align="center"><select style="width:9vw" oninput="onInputRed($(this))"> <option>p</option><option selected>g</option></td>';
-                        }
-                    }else if(i==6) {
-                        if(array[i]=='allow') {
-                            html = html + '<td align="center"><select style="width:9vw" oninput="onInputRed($(this))"> <option selected>allow</option><option>deny</option></td>';
-                        }else {
-                            html = html + '<td align="center"><select style="width:9vw" oninput="onInputRed($(this))"> <option>allow</option><option selected>deny</option></td>';
-                        }
-                    }else{
-                            html = html + '<td align="center"><input style="width:9vw" oninput="onInputRed($(this))" value="' + array[i] + '"></td>';
-                    }
+                    html = html + '<td align="center"><input style="width:9vw" oninput="onInputRed($(this))" value="' + array[i] + '"></td>';
                 }else{
                     html = html + '<td align="center"><input style="width:9vw" oninput="onInputRed($(this))" value=""></td>';//不够就补上空的输入框
                 }
             }
-            html = html + '<td align="center"><img  class="pointer-as-hand" style="width: 4vh;height: 4vh" src="./static/images/col_add.svg" onclick="insertRow($(this))">&nbsp;<img  class="pointer-as-hand" style="width: 4vh;height: 4vh" src="./static/images/col_del.svg" onclick="deleteCurrentRow($(this))"></td>';//添加删除行
+            html = html + '<td align="center"><a class="pointer-as-hand" onclick="insertRow($(this))">插入行</a>&nbsp;<a class="pointer-as-hand" onclick="deleteCurrentRow($(this))">删除行</a></td>';//添加删除行
             html = html + "</tr>";
             return html;
         }
@@ -192,20 +178,20 @@
 
 
 <ol class="breadcrumb" style="font-size: medium;padding:10px 20px;">
-    <li><a href="Tenant.html">Tenant List</a></li>
-    <li><a href="javascript:history.go(-1)">Policy Tree</a></li>
-    <li class="active">Patron Policy Editor</li>
-    <span class="username">Welcome，<span id="username"></span></span>
+    <li><a href="Tenant.html">租户列表</a></li>
+    <li><a href="javascript:history.go(-1)">策略树编辑器</a></li>
+    <li class="active">Patron策略编辑器</li>
+    <span class="username">您好，<span id="username"></span></span>
 </ol>
 
-<div class="container" >
-    <h3 style="text-align: center;margin-top: 1vh;margin-bottom: 1vh"><b>Policy List</b></h3>
+<div class="container">
+    <h3 style="text-align: center;margin-top: 1vh;margin-bottom: 1vh"><b>策略列表</b></h3>
     <div id="excel">
     </div>
 
     <div style="text-align: center;padding-top:1vh;padding-bottom: 2vh">
-        <button type="button" style="font-size: medium" class="btn btn-success btn-block"
-                onclick="postPolicyToServer()">Save
+        <button type="button" class="btn btn-success btn-block"
+                onclick="postPolicyToServer()">保存
         </button>
     </div>
 </div>
