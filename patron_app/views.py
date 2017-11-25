@@ -44,10 +44,10 @@ def tenants(request):
     files = os.listdir(patron_dir + "/custom_policy")
     files.sort()
     i = 0
-    display_names = {"admin": "Admins（云平台管理员）",
-                     "tenant1": "企业A",
-                     "tenant2": "企业B",
-                     "tenant3": "企业C"}
+    display_names = {"admin": "Administrator",
+                     "tenant1": "Company A",
+                     "tenant2": "Company B",
+                     "tenant3": "Company C"}
     for f in files:
         print f
         tmp_tenant = {}
