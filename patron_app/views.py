@@ -45,9 +45,9 @@ def tenants(request):
     files.sort()
     i = 0
     display_names = {"admin": "Admins（云平台管理员）",
-                     "tenant1": "企业A",
-                     "tenant2": "企业B",
-                     "tenant3": "企业C"}
+                     "tenant1": "学校A",
+                     "tenant2": "学校B",
+                     "tenant3": "学校C"}
     for f in files:
         print f
         tmp_tenant = {}
