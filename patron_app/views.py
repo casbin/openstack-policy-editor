@@ -41,6 +41,7 @@ def tenants(request):
 
     response_data = []
 
+    print "Searching: " + patron_dir + "/custom_policy"
     files = os.listdir(patron_dir + "/custom_policy")
     files.sort()
     i = 0
