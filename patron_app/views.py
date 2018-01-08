@@ -309,14 +309,7 @@ def command(request, tenant_id, user_name, command):
 
 
 def reset(request):
-    shutil.rmtree(patron_dir)
-    print "deleted " + patron_dir
-
-    patron_copy_dir = patron_dir + "_copy"
-    shutil.copytree(patron_copy_dir, patron_dir)
-    print "copied from " + patron_copy_dir + " to " + patron_dir
-
-    return MyHttpResponse("{\"status\":\"success\"}", content_type="application/json")
+    return MyHttpResponse("{\"status\":\"%s\"}" % patron_dir, content_type="application/json")
 
 
 def redirect_handler(request, url_path):
