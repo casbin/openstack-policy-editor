@@ -22,13 +22,13 @@
     <script>
         //https://github.com/indrimuska/jquery-editable-select
         /*
-         1.从JS读取二维数组，第一层是name,第二层是action，同时要保证更改第一个下拉菜单的时候第二个跟着变。用了第三方的库dropdown-enhancement
-         2.Value的话，前三个固定，第四部分需要从policy.json中除去带冒号的，剩下的key显示出来，内容显示在鼠标指上去的提示中。
+         1.Read the two-dimensional array from JS, the first layer is name, the second layer is action, and the second one is changed when the first drop-down menu is changed. Using a third-party library dropdown-enhancement 26
+         2. For Value, the first three are fixed. The fourth part needs to remove the colon from policy.json. The remaining keys are displayed, and the content is displayed in the prompt on the mouse pointer.
          */
-        // .load()方法，已经废弃，现在用来执行ajax操作。只有.on()和.onload
-        //$(document).ready()——网页中所有 DOM 结构绘制完毕后就执行，可能 DOM 元素关联的内容并没有加载完
-        //TODO 任意一个节点可以作为其他节点的rule，比如"compute:destroy":"rule:compute:create"这种。json可以为空
-        //TODO 因此，default虽然在代码中被分为了custom_rule，但是实际上还是可以引用其他的
+        // The .load() method, which has been deprecated, is now used to perform ajax operations. Only .on() and .onload 29
+        // $(document).ready() - After all the DOM structures in the web page have been drawn, the content associated with the DOM element may not be loaded.
+        //TODO  Any node can be used as a rule for other nodes, such as 'compute:destroy':'rule:compute:create'. Json can be empty
+        //TODO  Therefore, although the default is divided into custom_rule in the code, it can actually reference other
         var current_json = new Object();
         var custom_rule = new Object();
         var policy_name;
