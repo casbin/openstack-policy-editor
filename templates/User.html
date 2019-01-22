@@ -35,7 +35,7 @@
         });
         function reset() {
             $.getJSON(getBaseUrl()+"/" + "reset", function (data) {
-                niceAlert("重置成功",true);
+                niceAlert("Reset successfully",true);
                 location.reload(true);
             });
         }
@@ -50,7 +50,7 @@
         //跳转
         function executeCommand(user_id) {
             $.confirm({
-                title: "执行命令",
+                title: "Excuting an order",
                 content: '' +
                 '<form action="" class="formName" style="height: auto;min-height: 30vh">' +
                 '<div class="form-group">' +
@@ -65,12 +65,12 @@
                 columnClass: 'col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1',
                 buttons: {
                     formSubmit: {
-                        text: "提交",
+                        text: "submit",
                         btnClass: 'btn-green',
                         action: function () {
                             var input = this.$content.find('#command_input').val();
                             let context = this;
-                            context.buttons['formSubmit'].setText("请稍候...");
+                            context.buttons['formSubmit'].setText("Please wait...");
                             context.buttons['formSubmit'].addClass("disabled");
                             $.get(getBaseUrl()+"/" + "tenants/" + tenant_id + "/users/" + user_id + "/commands/" + input,
                                 function (data, status) {
@@ -105,7 +105,7 @@
                                     } else {
                                         $('#command_result').html(data);
                                     }
-                                    context.buttons['formSubmit'].setText("提交");
+                                    context.buttons['formSubmit'].setText("submit");
                                     context.buttons['formSubmit'].removeClass("disabled");
                                 });
                             return false;

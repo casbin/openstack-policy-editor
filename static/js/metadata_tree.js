@@ -113,7 +113,7 @@ function save() {
         console.log(JSON.stringify(treedata));
         $.alert({
             title: "成功",
-            content:"保存成功！",
+            content:"Successfully saved！",
             animation: 'top',
             type: 'green',
             closeAnimation: 'bottom',
@@ -128,7 +128,7 @@ function save() {
         });
     }
     else
-        niceAlert("任意父节点不能仅有一个子节点，请重新检查！",false);
+        niceAlert("Any parent node can't have only one child node, please check again！",false);
 
 }
 

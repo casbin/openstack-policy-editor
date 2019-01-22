@@ -245,7 +245,7 @@
             if (btn) btn.bind("click", function () {
                 //如果这个节点是built-in，就不可以增加子节点
                 if (!isAdmin() && treeNode["built-in"] == "true") {
-                    niceAlert("内置节点不可修改！",false);
+                    niceAlert("Built-in nodes cannot be modified!！",false);
                     return;
                 }
                 var zTree = $.fn.zTree.getZTreeObj("treeDemo");
@@ -297,7 +297,7 @@
         function beforeRemove(treeId, treeNode) {
             //它自己不是管理员，而且是built-in或者它的父节点是built-in的情况下都不可以删
             if (!isAdmin() && (treeNode["built-in"] == "true" || treeNode.getParentNode()["built-in"] == "true" )) {
-                niceAlert('内置节点不可修改',false);
+                niceAlert('Built-in nodes cannot be modified!',false);
                 return false;
             }
             else
@@ -361,7 +361,7 @@
 <ol class="breadcrumb" style="font-size: medium;padding:10px 20px;">
     <li><a href="Tenant.html">Tenant list</a></li>
     <li class="active">Policy tree editor</li>
-    <span class="username">您好，<span id="username"></span></span>
+    <span class="username">Wellcome，<span id="username"></span></span>
 </ol>
 
 <div>
@@ -383,14 +383,14 @@
                 <div class="modal-body">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="modeleditor_name" class="col-sm-2 control-label">名字</label>
+                            <label for="modeleditor_name" class="col-sm-2 control-label">Name</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="modeleditor_name"
                                        placeholder="例: custom-policy">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="modeleditor_display_name" class="col-sm-2 control-label">Name</label>
+                            <label for="modeleditor_display_name" class="col-sm-2 control-label">Display Name</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="modeleditor_display_name"
                                        placeholder="例: 云平台-限制">

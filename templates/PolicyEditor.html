@@ -181,7 +181,7 @@
                 //以json格式发送就需要用stringify这个函数
                 $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/",JSON.stringify(policyObj), function (data) {
                     //console.log("save_policy_success:" + policy_name + ":" + data);
-                    niceAlert("保存成功",true);
+                    niceAlert("Successfully saved",true);
                     //history.go(-1);
                 }, "json");
             }
