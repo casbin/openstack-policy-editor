@@ -93,7 +93,7 @@ def metadata(request, tenant_id):
 
     if request.method == 'GET':
         print("method = " + request.method + ", file to read = " + metadata_path)
-        file_object = open(metadata_path, 'r')
+        file_object = open(metadata_path, 'r', encoding='utf-8')
         try:
             response_data = json.load(file_object)
             # metadata_text = file_object.read()
@@ -103,7 +103,7 @@ def metadata(request, tenant_id):
         return MyHttpResponse(json.dumps(response_data), content_type="application/json")
     elif request.method == 'POST':
         print("method = " + request.method + ", file to write = " + metadata_path)
-        file_object = open(metadata_path, 'w')
+        file_object = open(metadata_path, 'w', encoding='utf-8')
         try:
             tmp = json.loads(request.body)
             jstr = json.dumps(tmp, ensure_ascii=False, indent=4)
