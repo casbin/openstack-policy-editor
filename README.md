@@ -1,5 +1,5 @@
-# patron_rest
-A RESTful API for Patron UI.
+# Casbin Web UI
+A portal & RESTful API for Casbin: http://logstack.org:3000/Tenant.html
 
 ## API
 
@@ -17,25 +17,25 @@ A RESTful API for Patron UI.
 
 #### Policy
 
-1. http://osvt.net:3000/tenants
-2. http://osvt.net:3000/tenants/tenant1
-3. http://osvt.net:3000/tenants/tenant1/policies/custom-policy.csv
+1. http://logstack.org:3000/tenants
+2. http://logstack.org:3000/tenants/tenant1
+3. http://logstack.org:3000/tenants/tenant1/policies/custom-policy.csv
 
 #### Model
 
-1. http://osvt.net:3000/models/enable_model.conf
-2. http://osvt.net:3000/models/restrict_model.conf
-3. http://osvt.net:3000/models/custom_model.conf
+1. http://logstack.org:3000/models/enable_model.conf
+2. http://logstack.org:3000/models/restrict_model.conf
+3. http://logstack.org:3000/models/custom_model.conf
 
 #### User
 
-1. http://osvt.net:3000/tenants/admin/users
-2. http://osvt.net:3000/tenants/tenant1/users
+1. http://logstack.org:3000/tenants/admin/users
+2. http://logstack.org:3000/tenants/tenant1/users
 
 #### Command
 
-1. http://osvt.net:3000/tenants/admin/users/admin/commands
-2. http://osvt.net:3000/tenants/admin/users/admin/commands/nova%20service-list
-3. http://osvt.net:3000/tenants/tenant1/users/user1/commands/nova%20service-list
-4. http://osvt.net:3000/tenants/tenant1/users/user1/commands/nova%20list
-5. http://osvt.net:3000/tenants/tenant1/users/user2/commands/nova%20list
+1. http://logstack.org:3000/tenants/admin/users/admin/commands
+2. http://logstack.org:3000/tenants/admin/users/admin/commands/nova%20service-list
+3. http://logstack.org:3000/tenants/tenant1/users/user1/commands/nova%20service-list
+4. http://logstack.org:3000/tenants/tenant1/users/user1/commands/nova%20list
+5. http://logstack.org:3000/tenants/tenant1/users/user2/commands/nova%20list
