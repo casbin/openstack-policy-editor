@@ -49,7 +49,7 @@ def tenants(request):
                      "tenant2": "Company B",
                      "tenant3": "Company C"}
     for f in files:
-        print f
+        print(f)
         tmp_tenant = {}
         tmp_tenant['id'] = f
         tmp_tenant['name'] = display_names[f]
@@ -65,7 +65,7 @@ def models(request, model_name):
     model_path = patron_dir + "/model/" + model_name
 
     if request.method == 'GET':
-        print "method = " + request.method + ", file to read = " + model_path
+        print("method = " + request.method + ", file to read = " + model_path)
         file_object = open(model_path, 'r')
         try:
             rules = []
@@ -82,7 +82,7 @@ def models(request, model_name):
 
         return MyHttpResponse(json.dumps(response_data), content_type="application/json")
     else:
-        print "Unsupported method = " + request.method
+        print("Unsupported method = " + request.method)
         return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
 
@@ -92,7 +92,7 @@ def metadata(request, tenant_id):
     metadata_path = patron_dir + "/custom_policy/" + tenant_id + "/metadata.json"
 
     if request.method == 'GET':
-        print "method = " + request.method + ", file to read = " + metadata_path
+        print("method = " + request.method + ", file to read = " + metadata_path)
         file_object = open(metadata_path, 'r')
         try:
             response_data = json.load(file_object)
@@ -102,7 +102,7 @@ def metadata(request, tenant_id):
 
         return MyHttpResponse(json.dumps(response_data), content_type="application/json")
     elif request.method == 'POST':
-        print "method = " + request.method + ", file to write = " + metadata_path
+        print("method = " + request.method + ", file to write = " + metadata_path)
         file_object = open(metadata_path, 'w')
         try:
             tmp = json.loads(request.body)
@@ -113,7 +113,7 @@ def metadata(request, tenant_id):
 
             return MyHttpResponse("{\"status\":\"success\"}", content_type="text/html")
     else:
-        print "Unsupported method = " + request.method
+        print("Unsupported method = " + request.method)
         return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
 
@@ -130,7 +130,7 @@ def policy(request, tenant_id, policy_name):
                             content_type="text/html")
 
     if request.method == 'GET':
-        print "method = " + request.method + ", file to read = " + policy_path
+        print("method = " + request.method + ", file to read = " + policy_path)
         file_object = open(policy_path, 'r')
         try:
             rules = []
@@ -147,7 +147,7 @@ def policy(request, tenant_id, policy_name):
 
         return MyHttpResponse(json.dumps(response_data), content_type="application/json")
     elif request.method == 'POST':
-        print "method = " + request.method + ", file to write = " + policy_path
+        print("method = " + request.method + ", file to write = " + policy_path)
         file_object = open(policy_path, 'w')
         try:
             tmp = json.loads(request.body)
@@ -161,7 +161,7 @@ def policy(request, tenant_id, policy_name):
 
             return MyHttpResponse("{\"status\":\"success\"}", content_type="text/html")
     else:
-        print "Unsupported method = " + request.method
+        print("Unsupported method = " + request.method)
         return MyHttpResponse("Unsupported HTTP method: " + request.method, content_type="text/html")
 
 
@@ -173,7 +173,7 @@ def users(request, tenant_id):
         return MyHttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
     userlist_path = patron_dir + "/custom_policy/" + tenant_id + "/" + "users.txt"
-    print "method = " + request.method + ", file to read = " + userlist_path
+    print("method = " + request.method + ", file to read = " + userlist_path)
     file_object = open(userlist_path, 'r')
     user_list = file_object.read().split(",")
     response_data = user_list
@@ -221,22 +221,22 @@ def get_command_output(command):
 def enforce_command(tenant_id, sub, obj, act):
     if tenant_id == admin_tenant_id:
         res = True
-        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        print("sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res))
         return res
 
     if act == "compute_extension:services":
         res = False
-        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        print("sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res))
         return res
 
     if tenant_id == "tenant3":
         res = False
-        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        print("sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res))
         return res
 
     if sub == "admin":
         res = True
-        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        print("sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res))
         return res
 
     policy_path = patron_dir + "/custom_policy/" + tenant_id + "/custom-policy.json"
@@ -244,21 +244,21 @@ def enforce_command(tenant_id, sub, obj, act):
         file_object = open(policy_path, 'r')
     except:
         res = True
-        print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+        print("sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res))
         return res
 
     if obj != "":
         rule = '"%s": "target_id:%s and user_id:%s"' % (act, obj, sub)
     else:
         rule = '"%s": "user_id:%s"' % (act, sub)
-    print "rule = " + rule
+    print("rule = " + rule)
     rules = file_object.read()
     if rule in rules:
         res = True
     else:
         res = False
 
-    print "sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res)
+    print("sub = " + sub + ", obj = " + obj + ", act = " + act + ", res = " + str(res))
     return res
 
 
@@ -284,13 +284,13 @@ def command(request, tenant_id, user_name, command):
         return MyHttpResponse("The tenant doesn't exist, tenant = " + tenant_id, content_type="text/html")
 
     userlist_path = patron_dir + "/custom_policy/" + tenant_id + "/" + "users.txt"
-    print "method = " + request.method + ", file to read = " + userlist_path
+    print("method = " + request.method + ", file to read = " + userlist_path)
     file_object = open(userlist_path, 'r')
     user_list = file_object.read().split(",")
     if user_name not in user_list:
         return MyHttpResponse("The user doesn't exist, tenant = " + tenant_id + ", user = " + user_name, content_type="text/html")
 
-    print "method = " + request.method + ", tenant = " + tenant_id + ", user = " + user_name + ", command to run = " + command
+    print("method = " + request.method + ", tenant = " + tenant_id + ", user = " + user_name + ", command to run = " + command)
 
     time.sleep(1)
 
@@ -309,11 +309,11 @@ def command(request, tenant_id, user_name, command):
 
 def reset(request):
     shutil.rmtree(patron_dir)
-    print "deleted " + patron_dir
+    print("deleted " + patron_dir)
 
     patron_copy_dir = patron_dir + "_copy"
     shutil.copytree(patron_copy_dir, patron_dir)
-    print "copied from " + patron_copy_dir + " to " + patron_dir
+    print("copied from " + patron_copy_dir + " to " + patron_dir)
 
     return MyHttpResponse("{\"status\":\"success\"}", content_type="application/json")
 
