@@ -1,0 +1,12 @@
+p, tenant1, admin1, /tenant1/metadata, *, patron, allow
+p, tenant1, admin1, /tenant1/policy, *, patron, allow
+
+p, tenant2, admin2, /tenant2/metadata, *, patron, allow
+p, tenant2, admin2, /tenant2/policy, *, patron, allow
+
+p, tenant3, admin3, /tenant3/metadata, *, patron, allow
+p, tenant3, admin3, /tenant3/policy, *, patron, allow
+
+g, user11, admin1
+g, user2, admin2
+g, user3, admin3
