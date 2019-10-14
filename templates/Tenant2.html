@@ -2,7 +2,7 @@
 <html lang="cn">
 <head>
     <meta charset="UTF-8">
-    <title>登录</title>
+    <title>Log in</title>
     <!-- favicon -->
     <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon" />
     <link rel="bookmark" href="../static/images/favicon.ico" type="image/x-icon" />
@@ -31,27 +31,27 @@
 <body>
 
 <ol class="breadcrumb" style="font-size: medium;padding:10px 20px;">
-    <li class="active">租户登录</li>
+    <li class="active">Tenant login</li>
 </ol>
 <div class="container">
     <div class="row" style="margin-top:5%">
         <div class="col-md-6 col-md-offset-3">
             <div class="well col-md-10 col-md-offset-1">
-                <h3 class="text-center">租户登录</h3>
+                <h3 class="text-center">Tenant login</h3>
                 <hr>
                 <div class="input-group input-group-md">
                     <span class="input-group-addon" ><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
-                    <input type="text" class="form-control" name="username" placeholder="租户名" id="username">
+                    <input type="text" class="form-control" name="username" placeholder="Tenant name" id="username">
                 </div>
-                <h6 id="username_alert" hidden>请输入租户名</h6>
+                <h6 id="username_alert" hidden>Please enter the tenant name</h6>
                 <div class="input-group input-group-md">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-                    <input type="password" class="form-control" name="password" placeholder="密码"  id="password" onkeydown="onPasswordEnterKeyPressed(event)" >
+                    <input type="password" class="form-control" name="password" placeholder="password"  id="password" onkeydown="onPasswordEnterKeyPressed(event)" >
                 </div>
-                <h6 id="password_alert" hidden>请输入密码</h6>
+                <h6 id="password_alert" hidden>Please enter your password</h6>
                 <br/>
                 <button type="button" id="loginBtn" class="btn btn-success btn-block" onclick="login()">
-                    登录
+                    Login
                 </button>
             </div>
         </div>

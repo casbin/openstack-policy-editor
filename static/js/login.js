@@ -7,17 +7,17 @@ var userDb = [
         "id": "admin"
     },
     {
-        "username": "企业A",
+        "username": "学校A",
         "password": "111111",
         "id": "tenant1"
     },
     {
-        "username": "企业B",
+        "username": "学校B",
         "password": "111111",
         "id": "tenant2"
     },
     {
-        "username": "企业C",
+        "username": "学校C",
         "password": "111111",
         "id": "tenant3"
     }];

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>策略树编辑器</title>
+    <title>Policy tree editor</title>
     <link rel="stylesheet" href="../static/lib/zTreeStyle/zTreeStyle.css" type="text/css">
     <link rel="stylesheet" href="../static/css/metadata_tree.css" type="text/css">
     <script type="text/javascript" src="../static/lib/jquery-3.1.1.min.js"></script>
@@ -245,7 +245,7 @@
             if (btn) btn.bind("click", function () {
                 //如果这个节点是built-in，就不可以增加子节点
                 if (!isAdmin() && treeNode["built-in"] == "true") {
-                    niceAlert("内置节点不可修改！",false);
+                    niceAlert("Built-in nodes cannot be modified!！",false);
                     return;
                 }
                 var zTree = $.fn.zTree.getZTreeObj("treeDemo");
@@ -297,7 +297,7 @@
         function beforeRemove(treeId, treeNode) {
             //它自己不是管理员，而且是built-in或者它的父节点是built-in的情况下都不可以删
             if (!isAdmin() && (treeNode["built-in"] == "true" || treeNode.getParentNode()["built-in"] == "true" )) {
-                niceAlert('内置节点不可修改',false);
+                niceAlert('Built-in nodes cannot be modified!',false);
                 return false;
             }
             else
@@ -359,17 +359,17 @@
 </head>
 <body>
 <ol class="breadcrumb" style="font-size: medium;padding:10px 20px;">
-    <li><a href="Tenant.html">租户列表</a></li>
-    <li class="active">策略树编辑器</li>
-    <span class="username">您好，<span id="username"></span></span>
+    <li><a href="Tenant.html">Tenant list</a></li>
+    <li class="active">Policy tree editor</li>
+    <span class="username">Wellcome，<span id="username"></span></span>
 </ol>
 
 <div>
     <div class="margin-left2">
-        <h1>策略树编辑器</h1>
+        <h1>Policy tree editor</h1>
         <ul id="treeDemo" class="ztree"></ul>
-        <button class="btn btn-success margin-left-top" onclick="save()">保存</button>
-        <button class="btn btn-primary margin-left-top2" onclick="viewFile()">查看策略树文件</button>
+        <button class="btn btn-success margin-left-top" onclick="save()">Save</button>
+        <button class="btn btn-primary margin-left-top2" onclick="viewFile()">View policy tree file</button>
     </div>
     <!-- 模态框（Modal） -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -378,33 +378,33 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">节点编辑器</h4>
+                    <h4 class="modal-title" id="myModalLabel">Node editor</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="modeleditor_name" class="col-sm-2 control-label">名字</label>
+                            <label for="modeleditor_name" class="col-sm-2 control-label">Name</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="modeleditor_name"
                                        placeholder="例: custom-policy">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="modeleditor_display_name" class="col-sm-2 control-label">显示名称</label>
+                            <label for="modeleditor_display_name" class="col-sm-2 control-label">Display Name</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="modeleditor_display_name"
                                        placeholder="例: 云平台-限制">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="modeleditor_type" class="col-sm-2 control-label">类别</label>
+                            <label for="modeleditor_type" class="col-sm-2 control-label">Type</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="modeleditor_type">
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="modeleditor_builtin" class="col-sm-2 control-label">是否内置</label>
+                            <label for="modeleditor_builtin" class="col-sm-2 control-label">Builtin</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="modeleditor_builtin">
                                     <option>true</option>
@@ -413,21 +413,21 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="modeleditor_version" class="col-sm-2 control-label">版本</label>
+                            <label for="modeleditor_version" class="col-sm-2 control-label">Version</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="modeleditor_version"
                                        placeholder="例: v1.0">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="modeleditor_description" class="col-sm-2 control-label">策略描述</label>
+                            <label for="modeleditor_description" class="col-sm-2 control-label">Policy description</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="modeleditor_description"
                                        placeholder="例: 默认描述">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="modeleditor_content" class="col-sm-2 control-label">内容</label>
+                            <label for="modeleditor_content" class="col-sm-2 control-label">Detail</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" id="modeleditor_content"
                                        placeholder="例: policy.json">
@@ -437,10 +437,10 @@
                             <label for="goto_policy_editor_btn" class="col-sm-2 control-label"> </label>
                             <div class="col-sm-10">
                                 <button type="button" id="goto_policy_editor_btn" class="btn btn-primary"
-                                        onclick="jumpToPolicyEditor(tenant_id,tenant_name)" aria-hidden="true">编辑此策略
+                                        onclick="jumpToPolicyEditor(tenant_id,tenant_name)" aria-hidden="true">Edit this strategy
                                 </button>
                                 <button type="button" id="view_model_btn" class="btn btn-primary"
-                                        onclick="viewModel('enable_model.conf')" aria-hidden="true">查看Model
+                                        onclick="viewModel('enable_model.conf')" aria-hidden="true">View Model
                                 </button>
                             </div>
                         </div>
@@ -449,8 +449,8 @@
                 </div>
                 <div class="modal-footer">
                     <!-- data-dismiss用于关闭对话框 -->
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="modeleditor_save" onclick="updateNode()">保存
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="modeleditor_save" onclick="updateNode()">Save
                     </button>
                 </div>
             </div><!-- /.modal-content -->

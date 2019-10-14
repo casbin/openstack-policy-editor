@@ -33,7 +33,7 @@ function save_this_policy() {
     }
     else if($('#value_radio_2').is(':checked')){
         if($("#target_user_name").val()== ""){
-            niceAlert("请填写完整",false);
+            niceAlert("Please complete",false);
             return ;
         }
         if($("#target_vm_name").val()== ""){
@@ -43,7 +43,7 @@ function save_this_policy() {
         }
     }else{
         if($("#formula").val()==""){
-            niceAlert("请填写完整",false);
+            niceAlert("Please complete",false);
             return ;
         }
         value = $("#formula").val();
@@ -66,7 +66,7 @@ function save_this_policy() {
                         current_json[key] = value;//添加属性
                         //删除某个点比较困难，直接刷新吧哈哈
                         show_policy_list();
-                        niceAlert("添加成功",true);
+                        niceAlert("Added successfully",true);
                     }
                 },
                 cancel: {
@@ -89,7 +89,7 @@ function save_this_policy() {
     } else {
         current_json[key] = value;//添加属性
         $("#policy-list-group").prepend('<li class="list-group-item"> <a class="key-color">\"' + key + '\"</a>: <a class="value-color">\"' + value + '\"</a><span><img class="pointer-as-hand delete-btn " src="./images/delete.png"  onclick="afterDeleteListItem($(this).closest(\'.list-group-item\'))"/></span></li>');   //prepend可以添加在开头
-        niceAlert("添加成功",true);
+        niceAlert("Added successfully",true);
     }
 };
 
@@ -128,7 +128,7 @@ function save_this_rule() {
                         custom_rule[name] = value;//添加属性
                         show_sub_rule_menu();//刷新rule子菜单
                         show_rule_list();
-                        niceAlert("添加成功",true);
+                        niceAlert("Added successfully",true);
                     }
                 },
                 cancel: {
@@ -151,7 +151,7 @@ function save_this_rule() {
         custom_rule[name] = value;//添加属性
         show_sub_rule_menu();//刷新rule子菜单
         $("#rule-list-group").prepend('<li class="list-group-item"><a class="text-warning">\"' + name + '\"</a>: <a class="text-info">\"' + value + '\"</a><span><img class="pointer-as-hand delete-btn " src="./images/delete.png"  onclick="afterDeleteRuleListItem($(this).closest(\'.list-group-item\'))"/></span></li>');   //在开头添加
-        niceAlert("添加成功",true);
+        niceAlert("Added successfully",true);
     }
 };
 
