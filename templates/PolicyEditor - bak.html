@@ -167,7 +167,7 @@
                 //以json格式发送就需要用stringify这个函数
                 $.post(getBaseUrl()+"/" + "tenants/" + tenant_id + "/policies/" + policy_name + "/",JSON.stringify(policyObj), function (data) {
                     //console.log("save_policy_success:" + policy_name + ":" + data);
-                    niceAlert("保存成功",true);
+                    niceAlert("Successfully saved",true);
                     //history.go(-1);
                 }, "json");
             }
@@ -178,10 +178,10 @@
 
 
 <ol class="breadcrumb" style="font-size: medium;padding:10px 20px;">
-    <li><a href="Tenant.html">租户列表</a></li>
-    <li><a href="javascript:history.go(-1)">策略树编辑器</a></li>
-    <li class="active">Patron策略编辑器</li>
-    <span class="username">您好，<span id="username"></span></span>
+    <li><a href="Tenant.html">Tenant list</a></li>
+    <li><a href="javascript:history.go(-1)">Policy tree editor</a></li>
+    <li class="active">Patron Strategy Editor</li>
+    <span class="username">Wellcome，<span id="username"></span></span>
 </ol>
 
 <div class="container">
