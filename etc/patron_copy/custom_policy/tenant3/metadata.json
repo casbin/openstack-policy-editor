@@ -2,8 +2,8 @@
 	"current-policy": "default-policy",
 	"default-policy": {
 		"name": "default-policy",
-		"display-name": "内置策略-禁止任何操作",
-		"description": "云平台禁止该租户进行任何操作。",
+		"display-name": "Built-in policy - prohibit any operation",
+		"description": "The cloud platform prohibits the tenant from doing anything.",
 		"type": "all-forbid",
 		"built-in": "true",
 		"version": "v1.0",

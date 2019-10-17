@@ -2,23 +2,23 @@
  * Created by potter on 2017/1/20.
  */
 var userDb = [
-    {   "username": "Admins（云平台管理员）",
+    {   "username": "Admins (Cloud Platform Administrator)",
         "password": "111111",
         "id": "admin"
     },
     {
-        "username": "企业A",
+        "username": "schoolA",
         "password": "111111",
         "id": "tenant1"
     },
     {
-        "username": "企业B",
+        "username": "schoolB",
         "password": "111111",
         "id": "tenant2"
     },
     {
-        "username": "企业C",
-        "password": "111111",
+        "username": "schoolC",
+        "password": "111111", 
         "id": "tenant3"
     }];
 function login() {

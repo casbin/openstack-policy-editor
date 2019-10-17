@@ -6,26 +6,26 @@
                 "name": "custom-all-pass-policy", 
                 "content": "", 
                 "version": "v1.0", 
-                "display-name": "租户自定义策略-允许所有操作", 
+                "display-name": "Tenant Customization Policy - Allows all operations", 
                 "type": "all-pass", 
-                "description": "该租户自定义的策略。"
+                "description": "The tenant's custom strategy."
             }, 
             "name": "or-policy", 
             "built-in": "true", 
             "content": "enable-policy,custom-all-pass-policy", 
             "version": "v1.0", 
-            "display-name": "逻辑或（OR）", 
+            "display-name": "Logical or（OR）", 
             "type": "op-or", 
             "enable-policy": {
                 "name": "enable-policy", 
                 "built-in": "true", 
                 "content": "enable.csv",
                 "version": "v1.0", 
-                "display-name": "内置策略-授予租户必要的权限", 
+                "display-name": "Built-in policy - grants tenants the necessary permissions", 
                 "type": "default", 
-                "description": "云平台通过该策略授予该租户一些必要的权限，比如自身租户策略编辑权限，防止租户在策略上的误操作。"
+                "description": "The cloud platform grants the tenant the necessary rights, such as the self-tenant policy editing permission, to prevent the tenant from mistaking the policy."
             }, 
-            "description": "表示逻辑上的or, 该策略允许一个请求，当且仅当至少有一个子策略允许该请求。"
+            "description": "Represents a logical or, which allows a request if and only if at least one sub-policy allows the request."
         }, 
         "built-in": "true", 
         "content": "restrict-policy,or-policy", 
@@ -35,13 +35,13 @@
             "built-in": "true", 
             "content": "restrict.csv",
             "version": "v1.0", 
-            "display-name": "内置策略-限制非法访问", 
+            "display-name": "Built-in policy - restrict illegal access", 
             "type": "default", 
-            "description": "云平台通过该策略限制该租户访问其他租户的资源。"
+            "description": "The cloud platform restricts the tenant from accessing resources of other tenants through the policy."
         }, 
-        "display-name": "逻辑与（AND）", 
+        "display-name": "Logical (AND)", 
         "type": "op-and", 
-        "description": "表示逻辑上的and, 该策略允许一个请求，当且仅当所有子策略都允许该请求。"
+        "description": "Representing a logical and, the policy allows a request if and only if all child policies allow the request."
     }, 
     "current-policy": "and-policy"
 }
