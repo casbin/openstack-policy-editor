@@ -1,3 +1,5 @@
+# This project is deprecated, please see instead: https://github.com/casbin/casbin-dashboard
+
 # Casbin Web UI
 A portal & RESTful API for Casbin: http://logstack.org/
 
