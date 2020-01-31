@@ -56,7 +56,7 @@ function getBaseUrl() {
     var reg = new RegExp("//(.+?)/");
     var r = document.URL.match(reg);
     if (r != null) {
-        return "http://"+unescape(r[1]);
+        return "https://"+unescape(r[1]);
     }
     return null;
 }

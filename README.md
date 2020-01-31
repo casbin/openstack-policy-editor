@@ -1,4 +1,4 @@
-# This project is deprecated, please see instead: https://github.com/casbin/casbin-dashboard
+# News: see our latest Casbin dashboard: https://github.com/casbin/casbin-dashboard
 
 # Casbin Web UI
 A portal & RESTful API for Casbin: https://logstack.org/
@@ -19,25 +19,25 @@ A portal & RESTful API for Casbin: https://logstack.org/
 
 #### Policy
 
-1. http://logstack.org/tenants
-2. http://logstack.org/tenants/tenant1
-3. http://logstack.org/tenants/tenant1/policies/custom-policy.csv
+1. https://logstack.org/tenants
+2. https://logstack.org/tenants/tenant1
+3. https://logstack.org/tenants/tenant1/policies/custom-policy.csv
 
 #### Model
 
-1. http://logstack.org/models/enable_model.conf
-2. http://logstack.org/models/restrict_model.conf
-3. http://logstack.org/models/custom_model.conf
+1. https://logstack.org/models/enable_model.conf
+2. https://logstack.org/models/restrict_model.conf
+3. https://logstack.org/models/custom_model.conf
 
 #### User
 
-1. http://logstack.org/tenants/admin/users
-2. http://logstack.org/tenants/tenant1/users
+1. https://logstack.org/tenants/admin/users
+2. https://logstack.org/tenants/tenant1/users
 
 #### Command
 
-1. http://logstack.org/tenants/admin/users/admin/commands
-2. http://logstack.org/tenants/admin/users/admin/commands/nova%20service-list
-3. http://logstack.org/tenants/tenant1/users/user1/commands/nova%20service-list
-4. http://logstack.org/tenants/tenant1/users/user1/commands/nova%20list
-5. http://logstack.org/tenants/tenant1/users/user2/commands/nova%20list
+1. https://logstack.org/tenants/admin/users/admin/commands
+2. https://logstack.org/tenants/admin/users/admin/commands/nova%20service-list
+3. https://logstack.org/tenants/tenant1/users/user1/commands/nova%20service-list
+4. https://logstack.org/tenants/tenant1/users/user1/commands/nova%20list
+5. https://logstack.org/tenants/tenant1/users/user2/commands/nova%20list
