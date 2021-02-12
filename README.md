@@ -1,4 +1,4 @@
-# News: see our latest Casbin dashboard: https://github.com/casbin/casbin-dashboard
+# News: see our latest Casbin dashboard called Casdoor: https://github.com/casbin/casdoor
 
 # Casbin Web UI
 A portal & RESTful API for Casbin: https://cloud.casbin.org/
